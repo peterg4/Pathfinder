@@ -1,65 +1,76 @@
 body {
   font: 14px "Century Gothic", Futura, sans-serif;
-  margin: 20px;
-}
-
-ol, ul {
-  padding-left: 30px;
+  background-color: #333333;
+  color: ivory;
 }
 
 .board-row:after {
   clear: both;
   content: "";
   display: table;
+  width: fit-content;
 }
-
+.board-row {
+  width: fit-content;
+  margin: 0 auto;
+}
 .status {
   margin-bottom: 10px;
 }
-
+.center{
+  margin: 0 auto;
+}
 .square {
-  background: #fff;
-  border: 1px solid #999;
+  background: #333333;
+  border: 1px solid #444444;
   float: left;
-  font-size: 24px;
-  font-weight: bold;
-  line-height: 50px;
   height: 50px;
   margin-right: -1px;
   margin-top: -1px;
   padding: 0;
-  text-align: center;
   width: 50px;
+}
+.dark {
+  background-color: #222222;
 }
 .game-board{
   margin: 0 auto;
+  text-align: center;
+  width: 100%;
 }
 .square:focus {
   outline: none;
 }
-.red {
-  color: red;
-  background-color: red;
-}
-.kbd-navigation .square:focus {
-  background: #ddd;
-}
-
 .game {
-  display: flex;
-  flex-direction: row;
   margin: 0 auto;
 }
-
-.game-info {
-  margin-left: 20px;
+.wide {
+  margin: 0 auto;
+  width: 60%;
 }
-
+hr{
+  border-color: ivory;
+}
+.reset:hover{
+  animation: colorAnimation 2s;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}
+/*classes for actual visualizing*/
 .green{
   background-color: green;
 }
 .start{
   background-color: blue;
+  border: 1px #444444 solid;
+  animation-name: startAnimation;
+  animation-duration: .6s;
+  animation-timing-function: ease-out;
+  animation-delay: 0;
+  animation-direction: alternate;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+  animation-play-state: running;
 }
 .current{
   background-color: red;
@@ -76,7 +87,7 @@ ol, ul {
   animation-play-state: running;
 }
 .X{
-  border: 1px solid rgb(175, 216, 248);
+  border: 1px solid #444444;
   animation-name: visitedAnimation;
   animation-duration: 1.0s;
   animation-timing-function: ease-out;
@@ -86,26 +97,59 @@ ol, ul {
   animation-fill-mode: forwards;
   animation-play-state: running;
 }
-
+.wall {
+  background-color: orangered;
+  border: 1px solid orange;
+  animation-name: wallAnimation;
+  animation-duration: .1s;
+  animation-timing-function: ease-out;
+  animation-delay: 0;
+  animation-direction: alternate;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+  animation-play-state: running;
+}
+/*animations  for pathfinding*/
 @keyframes visitedAnimation {
   0% {
     transform: scale(.3);
-    background-color: rgba(0, 0, 66, 0.75);
+    background-color: rgba(26, 213, 230, 0.5);
     border-radius: 100%;
   }
 
   50% {
-    background-color: rgba(17, 104, 217, 0.75);
+    background-color: rgba(22, 78, 230, 0.66);
   }
 
   75% {
     transform: scale(1.1);
-    background-color: rgba(0, 217, 159, 0.75)
+    background-color: rgba(102, 22, 230, 0.75);
   }
 
   100% {
     transform: scale(1.0);
-    background-color: rgba(0, 190, 218, 0.75);
+    background-color: rgba(188, 22, 230, 0.75);
+  }
+}
+@keyframes startAnimation {
+  0% {
+    transform: scale(.3);
+    background-color: rgba(26, 97, 230, 0.541);
+    border-radius: 100%;
+  }
+
+  50% {
+    background-color: rgba(22, 78, 230, 0.66);
+  }
+
+  75% {
+    transform: scale(1.1);
+    background-color: rgba(102, 22, 230, 0.75);
+  }
+
+  100% {
+    transform: scale(1.0);
+    background-color: rgb(96, 69, 251);
   }
 }
 
@@ -125,4 +169,29 @@ ol, ul {
     transform: scale(1.0);
     background-color: yellow;
   }
+}
+
+@keyframes wallAnimation {
+  0% {
+    transform: scale(.3);
+    background-color: rgba(0, 0, 66, 0.75);
+    border-radius: 100%;
+  }
+
+  75% {
+    transform: scale(1.1);
+    background-color: orange;
+  }
+
+  100% {
+    transform: scale(1.0);
+    background-color: orangered;
+  }
+}
+@keyframes colorAnimation {
+  from { background-color: #222222;}
+  to {background-color: rgba(102, 22, 230, 0.75); color: ivory;}
+}
+#root{
+  width: 100%;
 }
