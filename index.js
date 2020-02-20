@@ -1,130 +1,172 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css';
-
 function Square(props) {
     return (
-      <button className={props.value + ' square'} onClick={props.onClick}>
-        
-      </button>
+      <button className={props.value + ' square'} onClick={props.onClick} onMouseUp={props.onMouseUp} onMouseDown={props.onMouseDown} onMouseOver={props.onMouseOver}></button>
     );
   }
 
 class Board extends React.Component {
+
     constructor(props) {
         super(props);
-        var sqaure_board = [[]];
-        sqaure_board.shift();
+        var square_board = [[]];
+        square_board.shift();
         for(var j = 0; j < 15; j++){  
             var row = [];
             for(var i = 0; i < 28; i++){
-                if(i == 22 && j == 7)
+                if(i === 22 && j === 7)
                     row.push('green')
                 else 
                     row.push(null);
             }
-            sqaure_board.push(row);
+            square_board.push(row);
         }
-        var selected_board = [[]];
-        var r = [];
-        selected_board.shift();
-        for(var i = 0; i < 15; i++){
-            r.push('fill');
-        }
-        for(var j = 0; j < 28; j++){    
-            selected_board.push(row);
-        }
+        var xStart = 5;
+        var yStart = 5;
+        square_board[xStart][yStart] = 'start';
         this.state = {
-            squares: sqaure_board,
-            selected: selected_board,
-            xIsNext: true,
+            squares: square_board,
+            xStart: xStart,
+            yStart: yStart
         };
     }
+    resetState(){
+        var squares = [[]];
+        for(var j = 0; j < 15; j++){  
+            var row = [];
+            for(var i = 0; i < 28; i++){
+                if(i === 22 && j === 6)
+                    row.push('green')
+                else 
+                    row.push(null);
+            }
+            squares.push(row);
+        }
+        this.setState({squares: squares, xStart: 5, yStart: 5});
+    }
+
     BFS(i,j) {
         var queue = [[]];
         queue.push([i,j]);
         queue.shift();
-        var paths = new Map(); //arrays of index(string), distance, prev index(string) (for lookup too);
+        var paths = new Map();
         let y = queue[0][0];
         let x = queue[0][1]
         paths.set(y+','+x,[0,null]);
         console.log(queue[0]);
         var search = setInterval(() => {
-            if(queue.length !== 0 && !(y == 7 && x == 22)) {
-                var squares = [];
-                for (var o = 0; o < this.state.squares.length; o++)
-                    squares = this.state.squares.slice();
+            var squares = [];
+            for (var o = 0; o < this.state.squares.length; o++)
+                squares = this.state.squares.slice();
+            try{
                 y = queue[0][0];
                 x = queue[0][1];
-     //           console.log(paths.get(y+','+x)[0]);
-                if(squares[y][x] !== 'X') { 
-                    let dist = paths.get(y+','+x)[0]+1;
-                    if(x < 27 && squares[y][x+1] !== 'X') {
-                        queue.push([y,x+1]);
-                        paths.set(y+','+(x+1),[dist, y+','+x]);
-                    }
-                       
-                    if(x > 0 && squares[y][x-1] !== 'X'){
-                        queue.push([y,x-1]);
-                        paths.set(y+','+(x-1),[dist, y+','+x]);
-                    }
+                if(queue.length !== 0 && !(y === 7 && x === 22)) {
+                    if(squares[y][x] !== 'X') { 
+                        let dist = paths.get(y+','+x)[0]+1;
+                        if(x < 27 && squares[y][x+1] !== 'X' && squares[y][x+1] !== 'wall') {
+                            queue.push([y,x+1]);
+                            paths.set(y+','+(x+1),[dist, y+','+x]);
+                        }
+                        
+                        if(x > 0 && squares[y][x-1] !== 'X' && squares[y][x-1] !== 'wall'){
+                            queue.push([y,x-1]);
+                            paths.set(y+','+(x-1),[dist, y+','+x]);
+                        }
 
-                    if(y < 14 && squares[y+1][x] !== 'X'){
-                        queue.push([y+1,x]);
-                        paths.set((y+1)+','+x,[dist, y+','+x]);
-                    }
+                        if(y < 14 && squares[y+1][x] !== 'X' && squares[y+1][x] !== 'wall'){
+                            queue.push([y+1,x]);
+                            paths.set((y+1)+','+x,[dist, y+','+x]);
+                        }
 
-                    if(y > 0 && squares[y-1][x] !== 'X'){
-                        queue.push([y-1,x]);
-                        paths.set((y-1)+','+x,[dist, y+','+x]);
+                        if(y > 0 && squares[y-1][x] !== 'X' && squares[y-1][x] !== 'wall'){
+                            queue.push([y-1,x]);
+                            paths.set((y-1)+','+x,[dist, y+','+x]);
+                        }
+                        squares[y][x] = 'X';
+                        squares[i][j] = 'start';
+                        this.setState({squares: squares});
                     }
-                    squares[y][x] = 'X';
-                    squares[i][j] = 'start';
-                    this.setState({squares: squares,});
-                }
-                queue.shift();
-            } else {
-                var squares = [];
-                for (var o = 0; o < this.state.squares.length; o++)
-                    squares = this.state.squares.slice();
-                let y = queue[0][0];
-                let x = queue[0][1];
-             //   console.log(paths.get(y+','+x));
-                let next = paths.get(7+','+22)[1].split(',');
-                y = next[0];
-                x = next[1];
-                squares[y][x] = 'visited';
-                var find_path = setInterval(() => { 
-                    if(next !== null && !(x == j && y == i)) {
-                    squares[y][x] = 'visited';
-                    next = paths.get(y+','+x)[1];
-                    if(next!=null){
-                        next = next.split(',');
-                        y = next[0];
-                        x = next[1];
-                    }
-                    console.log(y+','+x);
-                    this.setState({squares: squares,}); 
+                    queue.shift();
                 } else {
-                 clearInterval(find_path);
+                    let next = paths.get(7+','+22)[1].split(',');
+                    y = next[0];
+                    x = next[1];
+                    squares[y][x] = 'visited';
+                    var find_path = setInterval(() => { 
+                        if(next !== null && !(x == j && y == i)) {
+                        squares[y][x] = 'visited';
+                        next = paths.get(y+','+x)[1];
+                        if(next!=null){
+                            next = next.split(',');
+                            y = next[0];
+                            x = next[1];
+                        }
+                        console.log(y+','+x);
+                        this.setState({squares: squares}); 
+                        } else {
+                        clearInterval(find_path);
+                        }
+                    clearInterval(search);
+                    }, 10);
                 }
+            } catch {
+                clearInterval(find_path);
                 clearInterval(search);
-                }, 10);
+                this.resetState();
             }
         }, 5);
     }
+    addWall(i,j){
+        console.log();
+        if(this.isMouseDown){
+            var squares = [];
+            for (var o = 0; o < this.state.squares.length; o++)
+                squares = this.state.squares.slice();
+            if(squares[i][j] == 'green' || squares[i][j] == 'start'){
+
+            } else {
+                squares[i][j] = 'wall';
+            }
+            this.setState({squares: squares});
+        }
+    }
+    toggleMouseDown(){
+        this.isMouseDown = true;
+    }
+    toggleMouseUp(){
+        this.isMouseDown = false;
+    }
+    moveStart(i,j){
+        var squares = [];
+        for (var o = 0; o < this.state.squares.length; o++)
+            squares = this.state.squares.slice();
+        var xStart = this.state.xStart;
+        var yStart = this.state.yStart;
+        squares[xStart][yStart] = null;
+        squares[i][j] = 'start';
+        xStart = i;
+        yStart = j;
+        this.setState({squares: squares, xStart: xStart, yStart: yStart})
+    }   
     renderSquare(i,j) {
         return (
-        <Square 
+        <Square
             value={this.state.squares[i][j]}
-            onClick={() => this.BFS(i,j)}
+            onClick={() => this.moveStart(i,j)}
             clas={this.state.class}
+            onMouseOver={() => this.addWall(i,j)}
+            onMouseDown={() => this.toggleMouseDown()}
+            onMouseUp={() => this.toggleMouseUp()}
+            isMouseDown ={this.isMouseDown}
         />
         );
     }
 
     render() {
-     //   const winner = calculateWinner(this.state.squares);
         let status;
         
         const items = [[]];
@@ -143,6 +185,11 @@ class Board extends React.Component {
         }
         return (
         <div>
+        <nav className="navbar navbar-dark dark">
+            <button className="navbar-toggler center reset"onClick={() => this.BFS(this.state.xStart,this.state.yStart)}> Start!</button>
+            <button className="navbar-toggler center reset"onClick={() => this.resetState()}> Reset Board</button>
+        </nav>
+             
         <div className="status">{status}</div>
             {board_}
         </div>
@@ -158,8 +205,6 @@ render() {
         <Board />
         </div>
         <div className="game-info">
-        <div>{/* status */}</div>
-        <ol>{/* TODO */}</ol>
         </div>
     </div>
     );
@@ -167,8 +212,5 @@ render() {
 }
 
 // ========================================
-
-ReactDOM.render(
-<Game />,
-document.getElementById('root')
-);
+const domContainer = document.querySelector('#root');
+ReactDOM.render(<Game />,domContainer);
