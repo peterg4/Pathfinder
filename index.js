@@ -120,14 +120,110 @@ class Board extends React.Component {
             }
         }, 5);
     }
+     A_star(i,j){
+        var queue = [[]];
+        queue.push([i,j]);
+        queue.shift();
+        var paths = new Map();
+        let y = queue[0][0];
+        let x = queue[0][1]
+        paths.set(y+','+x,[0,null]);
+        console.log(queue[0]);
+        var search = setInterval(() => {
+            var squares = [];
+            for (var o = 0; o < this.state.squares.length; o++)
+                squares = this.state.squares.slice();
+            try{
+                y = queue[0][0];
+                x = queue[0][1];
+                if(queue.length !== 0 && !(y === 7 && x === 22)) {
+                    if(squares[y][x] !== 'X') { 
+                        let dist  =2;
+                        //let dist = paths.get(y+','+x)[0]+1;
+                        
+                        if(x < 27 && squares[y][x+1] !== 'X' && squares[y][x+1] !== 'wall' && squares[y][x+1] !== 'weight real_weight') {
+                            queue.push([y,x+1]);
+                            paths.set(y+','+(x+1),[dist, y+','+x]);
+                        }
+                        if(x > 0 && squares[y][x-1] !== 'X' && squares[y][x-1] !== 'wall' && squares[y][x-1] !== 'weight real_weight'){
+                            queue.push([y,x-1]);
+                            paths.set(y+','+(x-1),[dist, y+','+x]);
+                        }
+
+                        if(y < 14 && squares[y+1][x] !== 'X' && squares[y+1][x] !== 'wall' && squares[y+1][x] !== 'weight real_weight'){
+                            queue.push([y+1,x]);
+                            paths.set((y+1)+','+x,[dist, y+','+x]);
+                        }
+
+                        if(y > 0 && squares[y-1][x] !== 'X' && squares[y-1][x] !== 'wall' && squares[y-1][x] !== 'weight real_weight'){
+                            queue.push([y-1,x]);
+                            paths.set((y-1)+','+x,[dist, y+','+x]);
+                        }
+                    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                        if( x < 27 && squares[y][x+1] == 'weight real_weight') {
+                            squares[y][x+1] = 'weight';
+                        }
+                        if(x > 0 && squares[y][x-1] == 'weight real_weight'){
+                            squares[y][x-1] = 'weight';
+                        }
+                        if(y > 14 && squares[y+1][x] == 'weight real_weight'){
+                            squares[y+1][x] = 'weight';
+                        }
+                        if(y > 0 && squares[y-1][x] == 'weight real_weight'){
+                            squares[y-1][x] = 'weight';
+                        }
+                        /*if(squares[y][x+1] == 'weight real_weight' || squares[y][x-1] == 'weight real_weight' || squares[y-1][x] == 'weight real_weight' || squares[y+1][x] == 'weight real_weight'){
+                            queue.push([y,x]);
+                        }*/
+
+                        squares[y][x] = 'X';
+                        squares[i][j] = 'start';
+                        this.setState({squares: squares});
+                    }
+                    queue.shift();
+                } else {
+                    let next = paths.get(7+','+22)[1].split(',');
+                    y = next[0];
+                    x = next[1];
+                    squares[y][x] = 'visited';
+                    var find_path = setInterval(() => { 
+                        if(next !== null && !(x == j && y == i)) {
+                        squares[y][x] = 'visited';
+                        next = paths.get(y+','+x)[1];
+                        if(next!=null){
+                            next = next.split(',');
+                            y = next[0];
+                            x = next[1];
+                        }
+                        this.setState({squares: squares}); 
+                        } else {
+                        clearInterval(find_path);
+                        }
+                    clearInterval(search);
+                    }, 10);
+                }
+            } catch {
+                clearInterval(find_path);
+                clearInterval(search);
+                this.resetState();
+            }
+        }, 5);
+    }
+    toggleWall(){
+        this.isWalls = true;
+    }
+    toggleWeight(){
+        this.isWalls = false;
+    }
     addWall(i,j){
-        console.log();
+        console.log(this.isWalls);
         if(this.isMouseDown){
             var squares = [];
             for (var o = 0; o < this.state.squares.length; o++)
                 squares = this.state.squares.slice();
             if(squares[i][j] == 'green' || squares[i][j] == 'start'){
-
+            } else if (!this.isWalls && this.isWalls!=undefined){
+                squares[i][j] = 'weight real_weight';
             } else {
                 squares[i][j] = 'wall';
             }
@@ -162,6 +258,7 @@ class Board extends React.Component {
             onMouseDown={() => this.toggleMouseDown()}
             onMouseUp={() => this.toggleMouseUp()}
             isMouseDown ={this.isMouseDown}
+            isWalls={this.isWalls}
         />
         );
     }
@@ -183,10 +280,16 @@ class Board extends React.Component {
         for (const [index] of items.entries()) {
             board_.push(<div className="board-row">{items[index]}</div>);
         }
+
         return (
+        
         <div>
         <nav className="navbar navbar-dark dark">
             <button className="navbar-toggler center reset"onClick={() => this.BFS(this.state.xStart,this.state.yStart)}> Start!</button>
+            <button className="navbar-toggler center reset"onClick={() => this.toggleWall()}> Add Walls</button>
+            <button className="navbar-toggler center reset"onClick={() => this.toggleWeight()}> Add Weights</button>
+            <button className="navbar-toggler center reset"onClick={() => this.BFS(this.state.xStart,this.state.yStart)}> Dijsktra's</button>
+            <button className="navbar-toggler center reset"onClick={() => this.A_star(this.state.xStart,this.state.yStart)}> A*</button>
             <button className="navbar-toggler center reset"onClick={() => this.resetState()}> Reset Board</button>
         </nav>
              
