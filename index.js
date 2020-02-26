@@ -180,11 +180,13 @@ class Board extends React.Component {
                 try{
                     y = open_list[0][0];
                     x = open_list[0][1];
+                    
                     if(open_list.length > 0 && !(y === 7 && x === 22)) {
+                        open_list.shift();
                         if(squares[y][x] !== 'X') { 
                             if(x < 27 && squares[y][x+1] !== 'X' && squares[y][x+1] !== 'wall') {
                                 dist_origin = Math.abs(y-j) + Math.abs(x+1-i);
-                                dist_end = Math.abs(7-y) + Math.abs(22-x+1);
+                                dist_end = Math.abs(7-y) + Math.abs(22-(x+1));
                                 dist = dist_origin + dist_end;
                                 open_list.push([y,x+1,dist]);
                                 paths.set(y+','+(x+1),[dist, y+','+x]);
@@ -192,7 +194,7 @@ class Board extends React.Component {
                             
                             if(x > 0 && squares[y][x-1] !== 'X' && squares[y][x-1] !== 'wall'){
                                 dist_origin = Math.abs(y-j) + Math.abs(x-1-i);
-                                dist_end = Math.abs(7-y) + Math.abs(22-x-1);
+                                dist_end = Math.abs(7-y) + Math.abs(22-(x-1));
                                 dist = dist_origin + dist_end;
                                 open_list.push([y,x-1,dist]);
                                 paths.set(y+','+(x-1),[dist, y+','+x]);
@@ -200,7 +202,7 @@ class Board extends React.Component {
     
                             if(y < 14 && squares[y+1][x] !== 'X' && squares[y+1][x] !== 'wall'){
                                 dist_origin = Math.abs(y+1-j) + Math.abs(x-i);
-                                dist_end = Math.abs(7-y+1) + Math.abs(22-x);
+                                dist_end = Math.abs(7-(y+1)) + Math.abs(22-x);
                                 dist = dist_origin + dist_end;
                                 open_list.push([y+1,x,dist]);
                                 paths.set((y+1)+','+x,[dist, y+','+x]);
@@ -208,16 +210,16 @@ class Board extends React.Component {
     
                             if(y > 0 && squares[y-1][x] !== 'X' && squares[y-1][x] !== 'wall'){
                                 dist_origin = Math.abs(y-1-j) + Math.abs(x-i);
-                                dist_end = Math.abs(7-y-1) + Math.abs(22-x);
+                                dist_end = Math.abs(7-(y-1)) + Math.abs(22-x);
                                 dist = dist_origin + dist_end;
                                 open_list.push([y-1,x,dist]);
                                 paths.set((y-1)+','+x,[dist, y+','+x]);
                             }
-                            open_list.shift();
+                            
                             open_list.sort(function(a,b){
                                 return b[2]-a[2];
                             });
-                            console.log(open_list.length);
+                            console.log(open_list[0]);
                             squares[y][x] = 'X';
                             squares[i][j] = 'start';
                             this.setState({squares: squares});
