@@ -217,7 +217,7 @@ class Board extends React.Component {
                             }
                             
                             open_list.sort(function(a,b){
-                                return b[2]-a[2];
+                                return a[2]-b[2];
                             });
                             console.log(open_list[0]);
                             squares[y][x] = 'X';
