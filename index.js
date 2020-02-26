@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css';
+import { ControlLabel } from 'react-bootstrap';
 function Square(props) {
     return (
       <button className={props.value + ' square'} onClick={props.onClick} onMouseUp={props.onMouseUp} onMouseDown={props.onMouseDown} onMouseOver={props.onMouseOver}></button>
@@ -157,93 +158,97 @@ class Board extends React.Component {
         }, 5);
     }
     A_star(i,j){
-        var queue = [[]];
-        queue.push([i,j]);
-        queue.shift();
+        var dist_origin;
+        var dist_end = Math.abs(7-j) + Math.abs(22-i+1)
+        var dist;
+        var open_list = [[]];
+        open_list.shift();
+        open_list.push([i,j,dist_end]);
         var paths = new Map();
-        let y = queue[0][0];
-        let x = queue[0][1]
-        paths.set(y+','+x,[0,null]);
-        console.log(queue[0]);
-        var search = setInterval(() => {
-            var squares = [];
-            for (var o = 0; o < this.state.squares.length; o++)
-                squares = this.state.squares.slice();
-            try{
-                y = queue[0][0];
-                x = queue[0][1];
-                if(queue.length !== 0 && !(y === 7 && x === 22)) {
-                    if(squares[y][x] !== 'X') { 
-                        let dist  =2;
-                        //let dist = paths.get(y+','+x)[0]+1;
-                        
-                        if(x < 27 && squares[y][x+1] !== 'X' && squares[y][x+1] !== 'wall' && squares[y][x+1] !== 'weight real_weight') {
-                            queue.push([y,x+1]);
-                            paths.set(y+','+(x+1),[dist, y+','+x]);
+        paths.set(i+','+j,[0,null]);
+        let x = i;
+        let y = j;
+        console.log(open_list[0])
+        //for all the nodes next to the current node
+            //if cur node is end node animate path back
+            //calculate dist_origin + dist_end, add vals to open_list also insert paths into map like for 
+            //sort open_list and choose lowest val for next node
+            var search = setInterval(() => {
+                var squares = [];
+                for (var o = 0; o < this.state.squares.length; o++)
+                    squares = this.state.squares.slice();
+                try{
+                    y = open_list[0][0];
+                    x = open_list[0][1];
+                    if(open_list.length > 0 && !(y === 7 && x === 22)) {
+                        if(squares[y][x] !== 'X') { 
+                            if(x < 27 && squares[y][x+1] !== 'X' && squares[y][x+1] !== 'wall') {
+                                dist_origin = Math.abs(y-j) + Math.abs(x+1-i);
+                                dist_end = Math.abs(7-y) + Math.abs(22-x+1);
+                                dist = dist_origin + dist_end;
+                                open_list.push([y,x+1,dist]);
+                                paths.set(y+','+(x+1),[dist, y+','+x]);
+                            }
+                            
+                            if(x > 0 && squares[y][x-1] !== 'X' && squares[y][x-1] !== 'wall'){
+                                dist_origin = Math.abs(y-j) + Math.abs(x-1-i);
+                                dist_end = Math.abs(7-y) + Math.abs(22-x-1);
+                                dist = dist_origin + dist_end;
+                                open_list.push([y,x-1,dist]);
+                                paths.set(y+','+(x-1),[dist, y+','+x]);
+                            }
+    
+                            if(y < 14 && squares[y+1][x] !== 'X' && squares[y+1][x] !== 'wall'){
+                                dist_origin = Math.abs(y+1-j) + Math.abs(x-i);
+                                dist_end = Math.abs(7-y+1) + Math.abs(22-x);
+                                dist = dist_origin + dist_end;
+                                open_list.push([y+1,x,dist]);
+                                paths.set((y+1)+','+x,[dist, y+','+x]);
+                            }
+    
+                            if(y > 0 && squares[y-1][x] !== 'X' && squares[y-1][x] !== 'wall'){
+                                dist_origin = Math.abs(y-1-j) + Math.abs(x-i);
+                                dist_end = Math.abs(7-y-1) + Math.abs(22-x);
+                                dist = dist_origin + dist_end;
+                                open_list.push([y-1,x,dist]);
+                                paths.set((y-1)+','+x,[dist, y+','+x]);
+                            }
+                            open_list.shift();
+                            open_list.sort(function(a,b){
+                                return b[2]-a[2];
+                            });
+                            console.log(open_list.length);
+                            squares[y][x] = 'X';
+                            squares[i][j] = 'start';
+                            this.setState({squares: squares});
                         }
-                        if(x > 0 && squares[y][x-1] !== 'X' && squares[y][x-1] !== 'wall' && squares[y][x-1] !== 'weight real_weight'){
-                            queue.push([y,x-1]);
-                            paths.set(y+','+(x-1),[dist, y+','+x]);
-                        }
-
-                        if(y < 14 && squares[y+1][x] !== 'X' && squares[y+1][x] !== 'wall' && squares[y+1][x] !== 'weight real_weight'){
-                            queue.push([y+1,x]);
-                            paths.set((y+1)+','+x,[dist, y+','+x]);
-                        }
-
-                        if(y > 0 && squares[y-1][x] !== 'X' && squares[y-1][x] !== 'wall' && squares[y-1][x] !== 'weight real_weight'){
-                            queue.push([y-1,x]);
-                            paths.set((y-1)+','+x,[dist, y+','+x]);
-                        }
-                    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                        if( x < 27 && squares[y][x+1] == 'weight real_weight') {
-                            squares[y][x+1] = 'weight';
-                        }
-                        if(x > 0 && squares[y][x-1] == 'weight real_weight'){
-                            squares[y][x-1] = 'weight';
-                        }
-                        if(y > 14 && squares[y+1][x] == 'weight real_weight'){
-                            squares[y+1][x] = 'weight';
-                        }
-                        if(y > 0 && squares[y-1][x] == 'weight real_weight'){
-                            squares[y-1][x] = 'weight';
-                        }
-                        /*if(squares[y][x+1] == 'weight real_weight' || squares[y][x-1] == 'weight real_weight' || squares[y-1][x] == 'weight real_weight' || squares[y+1][x] == 'weight real_weight'){
-                            queue.push([y,x]);
-                        }*/
-
-                        squares[y][x] = 'X';
-                        squares[i][j] = 'start';
-                        this.setState({squares: squares});
-                    }
-                    queue.shift();
-                } else {
-                    let next = paths.get(7+','+22)[1].split(',');
-                    y = next[0];
-                    x = next[1];
-                    squares[y][x] = 'visited';
-                    var find_path = setInterval(() => { 
-                        if(next !== null && !(x == j && y == i)) {
+                    } else {
+                        let next = paths.get(7+','+22)[1].split(',');
+                        y = next[0];
+                        x = next[1];
                         squares[y][x] = 'visited';
-                        next = paths.get(y+','+x)[1];
-                        if(next!=null){
-                            next = next.split(',');
-                            y = next[0];
-                            x = next[1];
-                        }
-                        this.setState({squares: squares}); 
-                        } else {
-                        clearInterval(find_path);
-                        }
+                        var find_path = setInterval(() => { 
+                            if(next !== null && !(x == j && y == i)) {
+                            squares[y][x] = 'visited';
+                            next = paths.get(y+','+x)[1];
+                            if(next!=null){
+                                next = next.split(',');
+                                y = next[0];
+                                x = next[1];
+                            }
+                            this.setState({squares: squares}); 
+                            } else {
+                            clearInterval(find_path);
+                            }
+                        clearInterval(search);
+                        }, 10);
+                    }
+                } catch {
+                    clearInterval(find_path);
                     clearInterval(search);
-                    }, 10);
+                    this.resetState();
                 }
-            } catch {
-                clearInterval(find_path);
-                clearInterval(search);
-                this.resetState();
-            }
-        }, 5);
+            }, 5);
     }
     toggleWall(){
         this.isWalls = true;
