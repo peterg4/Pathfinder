@@ -15,9 +15,9 @@ class Board extends React.Component {
         super(props);
         var square_board = [[]];
         square_board.shift();
-        for(var j = 0; j < 15; j++){  
+        for(var j = 0; j < 20; j++){  
             var row = [];
-            for(var i = 0; i < 28; i++){
+            for(var i = 0; i < 37; i++){
                 if(i === 22 && j === 7)
                     row.push('green')
                 else 
@@ -39,9 +39,9 @@ class Board extends React.Component {
     resetState(){
         var squares = [[]];
         squares.shift();
-        for(var j = 0; j < 15; j++){  
+        for(var j = 0; j < 20; j++){  
             var row = [];
-            for(var i = 0; i < 28; i++){
+            for(var i = 0; i < 37; i++){
                 if(i === 22 && j === 7)
                     row.push('green');
                 if( i===5 && j ===5)
@@ -75,8 +75,6 @@ class Board extends React.Component {
                     if(squares[y][x] !== 'X') { 
                         let dist = 1;
                         var isSet=0;
-                        //let dist = paths.get(y+','+x)[0]+1;
-                        console.log(squares[y][x]);
                         if(squares[y][x] == 'weight') {
                             squares[y][x] = 'wasweight';
                             queue.push([y,x]);
@@ -84,7 +82,7 @@ class Board extends React.Component {
                             return;
                         }
                     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                        if(x < 27 && squares[y][x+1] !== 'X' && squares[y][x+1] !== 'wall' && squares[y][x+1] !== 'weight real_weight') {
+                        if(x < 36 && squares[y][x+1] !== 'X' && squares[y][x+1] !== 'wall' && squares[y][x+1] !== 'weight real_weight') {
                             queue.push([y,x+1]);
                             paths.set(y+','+(x+1),[dist, y+','+x]);
                         }
@@ -93,7 +91,7 @@ class Board extends React.Component {
                             paths.set(y+','+(x-1),[dist, y+','+x]);
                         }
 
-                        if(y < 14 && squares[y+1][x] !== 'X' && squares[y+1][x] !== 'wall' && squares[y+1][x] !== 'weight real_weight'){
+                        if(y < 19 && squares[y+1][x] !== 'X' && squares[y+1][x] !== 'wall' && squares[y+1][x] !== 'weight real_weight'){
                             queue.push([y+1,x]);
                             paths.set((y+1)+','+x,[dist, y+','+x]);
                         }
@@ -103,7 +101,7 @@ class Board extends React.Component {
                             paths.set((y-1)+','+x,[dist, y+','+x]);
                         }
                     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                        if( x < 27 && squares[y][x+1] == 'weight real_weight') {
+                        if( x < 36 && squares[y][x+1] == 'weight real_weight') {
                             squares[y][x+1] = 'weight';
                             queue.push([y,x]);
                             squares[y][x] = null;
@@ -117,7 +115,7 @@ class Board extends React.Component {
                             isSet =1;
                       //      paths.set(y+','+(x-1),[dist, y+','+x]);
                         }
-                        if(y < 14 && squares[y+1][x] == 'weight real_weight'){
+                        if(y < 19 && squares[y+1][x] == 'weight real_weight'){
                             squares[y+1][x] = 'weight';
                             queue.push([y,x]);
                             squares[y][x] = null;
@@ -163,7 +161,7 @@ class Board extends React.Component {
                 clearInterval(search);
                 this.resetState();
             }
-        }, 5);
+        }, 1);
     }
     A_star(i,j){
         var dist_origin;
@@ -192,7 +190,7 @@ class Board extends React.Component {
                     if(open_list.length > 0 && !(y === 7 && x === 22)) {
                         open_list.shift();
                         if(squares[y][x] !== 'X') { 
-                            if(x < 27 && squares[y][x+1] !== 'X' && squares[y][x+1] !== 'wall') {
+                            if(x < 36 && squares[y][x+1] !== 'X' && squares[y][x+1] !== 'wall') {
                                 dist_origin = Math.abs(y-j) + Math.abs(x+1-i);
                                 dist_end = Math.abs(7-y) + Math.abs(22-(x+1));
                                 dist = dist_origin + dist_end;
@@ -208,7 +206,7 @@ class Board extends React.Component {
                                 paths.set(y+','+(x-1),[dist, y+','+x]);
                             }
     
-                            if(y < 14 && squares[y+1][x] !== 'X' && squares[y+1][x] !== 'wall'){
+                            if(y < 19 && squares[y+1][x] !== 'X' && squares[y+1][x] !== 'wall'){
                                 dist_origin = Math.abs(y+1-j) + Math.abs(x-i);
                                 dist_end = Math.abs(7-(y+1)) + Math.abs(22-x);
                                 dist = dist_origin + dist_end;
@@ -318,9 +316,9 @@ class Board extends React.Component {
         let status;
         
         const items = [[]];
-        for(var x = 0; x < 15; x++) {
+        for(var x = 0; x < 20; x++) {
             var row = [];
-            for(var j = 0; j < 28; j++){
+            for(var j = 0; j < 37; j++){
                 row.push(this.renderSquare(x,j));
                 if(j===8)
                     items.push(row);
@@ -336,6 +334,7 @@ class Board extends React.Component {
         
         <div>
         <nav className="navbar navbar-dark dark">
+            <a class="navbar-brand" href="#">Pathfinder</a>
             <button className="navbar-toggler reset first"onClick={() => this.toggleWall()}> Add Walls</button>
             <button className="navbar-toggler reset"onClick={() => this.toggleWeight()}> Add Weights</button>
             <button className="navbar-toggler reset"onClick={() => this.BFS(this.state.xStart,this.state.yStart)}> Dijsktra's</button>
