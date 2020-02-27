@@ -3,7 +3,23 @@ body {
   background-color: #333333;
   color: ivory;
 }
-
+.navbar{
+  height: 75px;
+  width: 100%;
+  display: block;
+  text-align: left;
+}
+.navbar-toggler{
+  margin-top: 10px;
+  margin-right: 25px;
+}
+.first{
+  margin-left: 20vw;
+}
+.last{
+  float: right;
+  margin-right: 20vw;
+}
 .board-row:after {
   clear: both;
   content: "";
