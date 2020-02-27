@@ -74,10 +74,13 @@ class Board extends React.Component {
                 if(queue.length !== 0 && !(y === 7 && x === 22)) {
                     if(squares[y][x] !== 'X') { 
                         let dist = 1;
+                        var isSet=0;
                         //let dist = paths.get(y+','+x)[0]+1;
+                        console.log(squares[y][x]);
                         if(squares[y][x] == 'weight') {
                             squares[y][x] = 'wasweight';
                             queue.push([y,x]);
+                            this.setState({squares: squares}); 
                             return;
                         }
                     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -102,29 +105,34 @@ class Board extends React.Component {
                     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                         if( x < 27 && squares[y][x+1] == 'weight real_weight') {
                             squares[y][x+1] = 'weight';
-                            queue.push([y,x+1]);
-                            paths.set(y+','+(x+1),[dist, y+','+x]); 
+                            queue.push([y,x]);
+                            squares[y][x] = null;
+                            isSet =1;
+                        //    paths.set(y+','+(x+1),[dist, y+','+x]); 
                         }
                         if(x > 0 && squares[y][x-1] == 'weight real_weight'){
                             squares[y][x-1] = 'weight';
-                            queue.push([y,x-1]);
-                            paths.set((y+1)+','+x,[dist, y+','+x]);
+                            queue.push([y,x]);
+                            squares[y][x] = null;
+                            isSet =1;
+                      //      paths.set(y+','+(x-1),[dist, y+','+x]);
                         }
                         if(y < 14 && squares[y+1][x] == 'weight real_weight'){
                             squares[y+1][x] = 'weight';
-                            queue.push([y+1,x]);
-                            paths.set((y-1)+','+x,[dist, y+','+x]);
+                            queue.push([y,x]);
+                            squares[y][x] = null;
+                            isSet =1;
+                        //    paths.set((y+1)+','+x,[dist, y+','+x]);
                         }
                         if(y > 0 && squares[y-1][x] == 'weight real_weight'){
                             squares[y-1][x] = 'weight';
-                            queue.push([y-1,x]);
-                            paths.set((y-1)+','+x,[dist, y+','+x]);
-                        }
-                        /*if(squares[y][x+1] == 'weight real_weight' || squares[y][x-1] == 'weight real_weight' || squares[y-1][x] == 'weight real_weight' || squares[y+1][x] == 'weight real_weight'){
                             queue.push([y,x]);
-                        }*/
-
-                        squares[y][x] = 'X';
+                            squares[y][x] = null;
+                            isSet =1;
+                        //    paths.set((y-1)+','+x,[dist, y+','+x]);
+                        }
+                        if(!isSet)
+                            squares[y][x] = 'X';
                         squares[i][j] = 'start';
                         this.setState({squares: squares});
                     }
@@ -159,7 +167,7 @@ class Board extends React.Component {
     }
     A_star(i,j){
         var dist_origin;
-        var dist_end = Math.abs(7-j) + Math.abs(22-i+1)
+        var dist_end = Math.abs(7-j) + Math.abs(22-i);
         var dist;
         var open_list = [[]];
         open_list.shift();
