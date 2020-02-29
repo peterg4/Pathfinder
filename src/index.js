@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css';
+import update from 'immutability-helper'
 import { ControlLabel } from 'react-bootstrap';
 function Square(props) {
     return (
@@ -68,6 +69,8 @@ class Board extends React.Component {
             var squares = [];
             for (var o = 0; o < this.state.squares.length; o++)
                 squares = this.state.squares.slice();
+            //copy only y+1, y-1, x+1, x-1
+            //how do i set state???? - coyp the 
             try{
                 y = queue[0][0];
                 x = queue[0][1];
@@ -75,6 +78,10 @@ class Board extends React.Component {
                     if(squares[y][x] !== 'X') { 
                         let dist = 1;
                         var isSet=0;
+                        if(squares[y][x] == 'X'){
+                            queue.shift();
+                            return;
+                        }
                         if(squares[y][x] == 'weight') {
                             squares[y][x] = 'wasweight';
                             queue.push([y,x]);
@@ -161,7 +168,7 @@ class Board extends React.Component {
                 clearInterval(search);
                 this.resetState();
             }
-        }, 1);
+        }, 0);
     }
     A_star(i,j){
         var dist_origin;
@@ -174,7 +181,6 @@ class Board extends React.Component {
         paths.set(i+','+j,[0,null]);
         let x = i;
         let y = j;
-        console.log(open_list[0])
         //for all the nodes next to the current node
             //if cur node is end node animate path back
             //calculate dist_origin + dist_end, add vals to open_list also insert paths into map like for 
@@ -183,10 +189,14 @@ class Board extends React.Component {
                 var squares = [];
                 for (var o = 0; o < this.state.squares.length; o++)
                     squares = this.state.squares.slice();
+                    
                 try{
                     y = open_list[0][0];
                     x = open_list[0][1];
-                    
+                    if(squares[y][x] == 'X'){
+                        open_list.shift();
+                        return;
+                    }
                     if(open_list.length > 0 && !(y === 7 && x === 22)) {
                         open_list.shift();
                         if(squares[y][x] !== 'X') { 
@@ -225,7 +235,6 @@ class Board extends React.Component {
                             open_list.sort(function(a,b){
                                 return a[2]-b[2];
                             });
-                            console.log(open_list[0]);
                             squares[y][x] = 'X';
                             squares[i][j] = 'start';
                             this.setState({squares: squares});
