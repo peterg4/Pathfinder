@@ -65,8 +65,10 @@ class Board extends React.Component {
         let x = queue[0][1]
         paths.set(y+','+x,[0,null]);
         console.log(queue[0]);
+        var timer = 1;
         var search = setInterval(() => {
             var squares = [];
+            timer++;
             for (var o = 0; o < this.state.squares.length; o++)
                 squares = this.state.squares.slice();
             //copy only y+1, y-1, x+1, x-1
@@ -139,7 +141,8 @@ class Board extends React.Component {
                         if(!isSet)
                             squares[y][x] = 'X';
                         squares[i][j] = 'start';
-                        this.setState({squares: squares});
+                        if(timer%6==0)
+                            this.setState({squares: squares});
                     }
                     queue.shift();
                 } else {
@@ -168,7 +171,7 @@ class Board extends React.Component {
                 clearInterval(search);
                 this.resetState();
             }
-        }, 0);
+        },0);
     }
     A_star(i,j){
         var dist_origin;
@@ -181,11 +184,13 @@ class Board extends React.Component {
         paths.set(i+','+j,[0,null]);
         let x = i;
         let y = j;
+        var timer = 1;
         //for all the nodes next to the current node
             //if cur node is end node animate path back
             //calculate dist_origin + dist_end, add vals to open_list also insert paths into map like for 
             //sort open_list and choose lowest val for next node
             var search = setInterval(() => {
+                timer++;
                 var squares = [];
                 for (var o = 0; o < this.state.squares.length; o++)
                     squares = this.state.squares.slice();
@@ -237,7 +242,8 @@ class Board extends React.Component {
                             });
                             squares[y][x] = 'X';
                             squares[i][j] = 'start';
-                            this.setState({squares: squares});
+                            if(timer%6==0)
+                                this.setState({squares: squares});
                         }
                     } else {
                         let next = paths.get(7+','+22)[1].split(',');
