@@ -9,17 +9,20 @@ function Square(props) {
       <button className={props.value + ' square'} onClick={props.onClick} onMouseUp={props.onMouseUp} onMouseDown={props.onMouseDown} onMouseOver={props.onMouseOver}></button>
     );
   }
-
+const GLOBAL_XMAX = 46;
+const GLOBAL_YMAX = 27;
+const GLOBAL_YGOAL = 13;
+const GLOBAL_XGOAL = 36;
 class Board extends React.Component {
 
     constructor(props) {
         super(props);
         var square_board = [[]];
         square_board.shift();
-        for(var j = 0; j < 20; j++){  
+        for(var j = 0; j < GLOBAL_YMAX; j++){  
             var row = [];
-            for(var i = 0; i < 37; i++){
-                if(i === 22 && j === 7)
+            for(var i = 0; i < GLOBAL_XMAX; i++){
+                if(i === GLOBAL_XGOAL && j === GLOBAL_YGOAL)
                     row.push('green')
                 else 
                     row.push(null);
@@ -40,10 +43,10 @@ class Board extends React.Component {
     resetState(){
         var squares = [[]];
         squares.shift();
-        for(var j = 0; j < 20; j++){  
+        for(var j = 0; j < GLOBAL_YMAX; j++){  
             var row = [];
-            for(var i = 0; i < 37; i++){
-                if(i === 22 && j === 7)
+            for(var i = 0; i < GLOBAL_XMAX; i++){
+                if(i ===  GLOBAL_XGOAL && j ===  GLOBAL_YGOAL)
                     row.push('green');
                 if( i===5 && j ===5)
                     row.push('start');
@@ -76,7 +79,7 @@ class Board extends React.Component {
             try{
                 y = queue[0][0];
                 x = queue[0][1];
-                if(queue.length !== 0 && !(y === 7 && x === 22)) {
+                if(queue.length !== 0 && !(y ===  GLOBAL_YGOAL && x ===  GLOBAL_XGOAL)) {
                     if(squares[y][x] !== 'X') { 
                         let dist = 1;
                         var isSet=0;
@@ -91,7 +94,7 @@ class Board extends React.Component {
                             return;
                         }
                     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                        if(x < 36 && squares[y][x+1] !== 'X' && squares[y][x+1] !== 'wall' && squares[y][x+1] !== 'weight real_weight') {
+                        if(x < GLOBAL_XMAX-1 && squares[y][x+1] !== 'X' && squares[y][x+1] !== 'wall' && squares[y][x+1] !== 'weight real_weight') {
                             queue.push([y,x+1]);
                             paths.set(y+','+(x+1),[dist, y+','+x]);
                         }
@@ -100,7 +103,7 @@ class Board extends React.Component {
                             paths.set(y+','+(x-1),[dist, y+','+x]);
                         }
 
-                        if(y < 19 && squares[y+1][x] !== 'X' && squares[y+1][x] !== 'wall' && squares[y+1][x] !== 'weight real_weight'){
+                        if(y < GLOBAL_YMAX-1 && squares[y+1][x] !== 'X' && squares[y+1][x] !== 'wall' && squares[y+1][x] !== 'weight real_weight'){
                             queue.push([y+1,x]);
                             paths.set((y+1)+','+x,[dist, y+','+x]);
                         }
@@ -146,7 +149,7 @@ class Board extends React.Component {
                     }
                     queue.shift();
                 } else {
-                    let next = paths.get(7+','+22)[1].split(',');
+                    let next = paths.get( GLOBAL_YGOAL+','+ GLOBAL_XGOAL)[1].split(',');
                     y = next[0];
                     x = next[1];
                     squares[y][x] = 'visited';
@@ -164,7 +167,7 @@ class Board extends React.Component {
                         clearInterval(find_path);
                         }
                     clearInterval(search);
-                    }, 10);
+                    }, 0);
                 }
             } catch {
                 clearInterval(find_path);
@@ -175,7 +178,7 @@ class Board extends React.Component {
     }
     A_star(i,j){
         var dist_origin;
-        var dist_end = Math.abs(7-j) + Math.abs(22-i);
+        var dist_end = Math.abs(GLOBAL_YGOAL-j) + Math.abs(GLOBAL_XGOAL-i);
         var dist;
         var open_list = [[]];
         open_list.shift();
@@ -202,12 +205,12 @@ class Board extends React.Component {
                         open_list.shift();
                         return;
                     }
-                    if(open_list.length > 0 && !(y === 7 && x === 22)) {
+                    if(open_list.length > 0 && !(y === GLOBAL_YGOAL && x === GLOBAL_XGOAL)) {
                         open_list.shift();
                         if(squares[y][x] !== 'X') { 
-                            if(x < 36 && squares[y][x+1] !== 'X' && squares[y][x+1] !== 'wall') {
+                            if(x < GLOBAL_XMAX-1 && squares[y][x+1] !== 'X' && squares[y][x+1] !== 'wall') {
                                 dist_origin = Math.abs(y-j) + Math.abs(x+1-i);
-                                dist_end = Math.abs(7-y) + Math.abs(22-(x+1));
+                                dist_end = Math.abs( GLOBAL_YGOAL-y) + Math.abs(GLOBAL_XGOAL-(x+1));
                                 dist = dist_origin + dist_end;
                                 open_list.push([y,x+1,dist]);
                                 paths.set(y+','+(x+1),[dist, y+','+x]);
@@ -215,15 +218,15 @@ class Board extends React.Component {
                             
                             if(x > 0 && squares[y][x-1] !== 'X' && squares[y][x-1] !== 'wall'){
                                 dist_origin = Math.abs(y-j) + Math.abs(x-1-i);
-                                dist_end = Math.abs(7-y) + Math.abs(22-(x-1));
+                                dist_end = Math.abs( GLOBAL_YGOAL-y) + Math.abs( GLOBAL_XGOAL-(x-1));
                                 dist = dist_origin + dist_end;
                                 open_list.push([y,x-1,dist]);
                                 paths.set(y+','+(x-1),[dist, y+','+x]);
                             }
     
-                            if(y < 19 && squares[y+1][x] !== 'X' && squares[y+1][x] !== 'wall'){
+                            if(y < GLOBAL_YMAX-1 && squares[y+1][x] !== 'X' && squares[y+1][x] !== 'wall'){
                                 dist_origin = Math.abs(y+1-j) + Math.abs(x-i);
-                                dist_end = Math.abs(7-(y+1)) + Math.abs(22-x);
+                                dist_end = Math.abs( GLOBAL_YGOAL-(y+1)) + Math.abs( GLOBAL_XGOAL-x);
                                 dist = dist_origin + dist_end;
                                 open_list.push([y+1,x,dist]);
                                 paths.set((y+1)+','+x,[dist, y+','+x]);
@@ -231,7 +234,7 @@ class Board extends React.Component {
     
                             if(y > 0 && squares[y-1][x] !== 'X' && squares[y-1][x] !== 'wall'){
                                 dist_origin = Math.abs(y-1-j) + Math.abs(x-i);
-                                dist_end = Math.abs(7-(y-1)) + Math.abs(22-x);
+                                dist_end = Math.abs( GLOBAL_YGOAL-(y-1)) + Math.abs( GLOBAL_XGOAL-x);
                                 dist = dist_origin + dist_end;
                                 open_list.push([y-1,x,dist]);
                                 paths.set((y-1)+','+x,[dist, y+','+x]);
@@ -242,11 +245,11 @@ class Board extends React.Component {
                             });
                             squares[y][x] = 'X';
                             squares[i][j] = 'start';
-                            if(timer%6==0)
+                            if(timer%5==0)
                                 this.setState({squares: squares});
                         }
                     } else {
-                        let next = paths.get(7+','+22)[1].split(',');
+                        let next = paths.get(GLOBAL_YGOAL+','+GLOBAL_XGOAL)[1].split(',');
                         y = next[0];
                         x = next[1];
                         squares[y][x] = 'visited';
@@ -331,9 +334,9 @@ class Board extends React.Component {
         let status;
         
         const items = [[]];
-        for(var x = 0; x < 20; x++) {
+        for(var x = 0; x < GLOBAL_YMAX; x++) {
             var row = [];
-            for(var j = 0; j < 37; j++){
+            for(var j = 0; j < GLOBAL_XMAX; j++){
                 row.push(this.renderSquare(x,j));
                 if(j===8)
                     items.push(row);
