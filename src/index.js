@@ -9,10 +9,10 @@ function Square(props) {
       <button id={props.location} className={'square'} onClick={props.onClick} onMouseUp={props.onMouseUp} onMouseDown={props.onMouseDown} onMouseOver={props.onMouseOver}></button>
     );
   }
-const GLOBAL_XMAX = 46;
-const GLOBAL_YMAX = 27;
-const GLOBAL_YGOAL = 13;
-const GLOBAL_XGOAL = 36;
+const GLOBAL_XMAX = 50;
+const GLOBAL_YMAX = 30;
+const GLOBAL_YGOAL = 15;
+const GLOBAL_XGOAL = 35;
 class Board extends React.Component {
 
     constructor(props) {
@@ -155,7 +155,6 @@ class Board extends React.Component {
                     }
                     queue.shift();
                 } else {
-                    console.log("pathing....")
                     let next = paths.get( GLOBAL_YGOAL+','+ GLOBAL_XGOAL)[1].split(',');
                     y = next[0];
                     x = next[1];
@@ -163,13 +162,14 @@ class Board extends React.Component {
                     var find_path = setInterval(() => { 
                         if(next !== null && !(x == j && y == i)) {
                         squares[y][x] = 'visited';
+                        document.getElementById(y+","+x).className = squares[y][x]+' square';
                         next = paths.get(y+','+x)[1];
                         if(next!=null){
                             next = next.split(',');
                             y = next[0];
                             x = next[1];
                         }
-                        document.getElementById(y+","+x).className = squares[y][x]+' square';
+                        
                         } else {
                         clearInterval(find_path);
                         }
@@ -252,8 +252,7 @@ class Board extends React.Component {
                             });
                             squares[y][x] = 'X';
                             squares[i][j] = 'start';
-                            if(timer%5==0)
-                                this.setState({squares: squares});
+                            document.getElementById(y+","+x).className = squares[y][x] + " square";
                         }
                     } else {
                         let next = paths.get(GLOBAL_YGOAL+','+GLOBAL_XGOAL)[1].split(',');
@@ -263,13 +262,13 @@ class Board extends React.Component {
                         var find_path = setInterval(() => { 
                             if(next !== null && !(x == j && y == i)) {
                             squares[y][x] = 'visited';
+                            document.getElementById(y+","+x).className = squares[y][x] + " square";
                             next = paths.get(y+','+x)[1];
                             if(next!=null){
                                 next = next.split(',');
                                 y = next[0];
                                 x = next[1];
                             }
-                            this.setState({squares: squares}); 
                             } else {
                             clearInterval(find_path);
                             }
@@ -300,8 +299,9 @@ class Board extends React.Component {
                 squares[i][j] = 'weight real_weight';
             } else {
                 squares[i][j] = 'wall';
+                document.getElementById(i+","+j).className = 'wall square';
             }
-            this.setState({squares: squares});
+           // this.setState({squares: squares});
         }
     }
     toggleMouseDown(){
@@ -317,7 +317,9 @@ class Board extends React.Component {
         var xStart = this.state.xStart;
         var yStart = this.state.yStart;
         squares[xStart][yStart] = null;
+        document.getElementById(xStart+","+yStart).className = "square";
         squares[i][j] = 'start';
+        document.getElementById(i+","+j).className = squares[i][j] + " square";
         xStart = i;
         yStart = j;
         this.setState({squares: squares, xStart: xStart, yStart: yStart})
@@ -365,7 +367,7 @@ class Board extends React.Component {
             <button className="navbar-toggler reset first"onClick={() => this.toggleWall()}> Add Walls</button>
             <button className="navbar-toggler reset"onClick={() => this.toggleWeight()}> Add Weights</button>
             <button className="navbar-toggler reset"onClick={() => this.BFS(this.state.xStart,this.state.yStart)}> Dijsktra's</button>
-            <button className="navbar-toggler  reset"onClick={() => this.A_star(this.state.xStart,this.state.yStart)}> A*</button>
+            <button className="navbar-toggler reset"onClick={() => this.A_star(this.state.xStart,this.state.yStart)}> A*</button>
             <button className="navbar-toggler reset last"onClick={() => this.resetState()}> Reset Board</button>
         </nav>
              
