@@ -71,6 +71,11 @@ hr{
   animation: colorAnimation 2s;
   animation-iteration-count: infinite;
   animation-direction: alternate;
+  -webkit-transform: translateZ(0);
+-moz-transform: translateZ(0);
+-ms-transform: translateZ(0);
+-o-transform: translateZ(0);
+transform: translateZ(0);
 }
 /*classes for actual visualizing*/
 .green{
@@ -87,6 +92,11 @@ hr{
   animation-iteration-count: 1;
   animation-fill-mode: forwards;
   animation-play-state: running;
+  -webkit-transform: translateZ(0);
+-moz-transform: translateZ(0);
+-ms-transform: translateZ(0);
+-o-transform: translateZ(0);
+transform: translateZ(0);
 }
 .current{
   background-color: red;
@@ -97,10 +107,13 @@ hr{
   animation-duration: 1.0s;
   animation-timing-function: ease-out;
   animation-delay: 0;
-  animation-direction: alternate;
   animation-iteration-count: 1;
   animation-fill-mode: forwards;
-  animation-play-state: running;
+  -webkit-transform: translateZ(0);
+-moz-transform: translateZ(0);
+-ms-transform: translateZ(0);
+-o-transform: translateZ(0);
+transform: translateZ(0);
 }
 .X{
   border: 1px solid #444444;
@@ -112,18 +125,15 @@ hr{
   animation-iteration-count: 1;
   animation-fill-mode: forwards;
   animation-play-state: running;
+  -webkit-transform: translateZ(0);
+-moz-transform: translateZ(0);
+-ms-transform: translateZ(0);
+-o-transform: translateZ(0);
+transform: translateZ(0);
 }
 .wall {
   background-color: orangered;
   border: 1px solid orange;
-  animation-name: wallAnimation;
-  animation-duration: .1s;
-  animation-timing-function: ease-out;
-  animation-delay: 0;
-  animation-direction: alternate;
-  animation-iteration-count: 1;
-  animation-fill-mode: forwards;
-  animation-play-state: running;
 }
 /*animations  for pathfinding*/
 @keyframes visitedAnimation {
@@ -211,3 +221,4 @@ hr{
 #root{
   width: 100%;
 }
+/* Enable hardware acceleration to fix laggy transitions */

@@ -6,7 +6,7 @@ import update from 'immutability-helper'
 import { ControlLabel } from 'react-bootstrap';
 function Square(props) {
     return (
-      <button className={props.value + ' square'} onClick={props.onClick} onMouseUp={props.onMouseUp} onMouseDown={props.onMouseDown} onMouseOver={props.onMouseOver}></button>
+      <button id={props.location} className={'square'} onClick={props.onClick} onMouseUp={props.onMouseUp} onMouseDown={props.onMouseDown} onMouseOver={props.onMouseOver}></button>
     );
   }
 const GLOBAL_XMAX = 46;
@@ -41,17 +41,24 @@ class Board extends React.Component {
         };
     }
     resetState(){
+        console.log('clearing...');
         var squares = [[]];
         squares.shift();
         for(var j = 0; j < GLOBAL_YMAX; j++){  
             var row = [];
             for(var i = 0; i < GLOBAL_XMAX; i++){
-                if(i ===  GLOBAL_XGOAL && j ===  GLOBAL_YGOAL)
+                document.getElementById(j+','+i).className = 'square';
+                if(i ===  GLOBAL_XGOAL && j ===  GLOBAL_YGOAL) {
                     row.push('green');
-                if( i===5 && j ===5)
+                    document.getElementById(j+','+i).className = 'green square';
+                }
+                if( i===5 && j ===5) {
+                    document.getElementById(j+','+i).className = 'start square';
                     row.push('start');
-                else 
+                }
+                else { 
                     row.push(null);
+                }
             }
             
             squares.push(row);
@@ -144,11 +151,11 @@ class Board extends React.Component {
                         if(!isSet)
                             squares[y][x] = 'X';
                         squares[i][j] = 'start';
-                        if(timer%6==0)
-                            this.setState({squares: squares});
+                        document.getElementById(y+","+x).className = squares[y][x] + " square";
                     }
                     queue.shift();
                 } else {
+                    console.log("pathing....")
                     let next = paths.get( GLOBAL_YGOAL+','+ GLOBAL_XGOAL)[1].split(',');
                     y = next[0];
                     x = next[1];
@@ -162,7 +169,7 @@ class Board extends React.Component {
                             y = next[0];
                             x = next[1];
                         }
-                        this.setState({squares: squares}); 
+                        document.getElementById(y+","+x).className = squares[y][x]+' square';
                         } else {
                         clearInterval(find_path);
                         }
@@ -326,6 +333,7 @@ class Board extends React.Component {
             onMouseUp={() => this.toggleMouseUp()}
             isMouseDown ={this.isMouseDown}
             isWalls={this.isWalls}
+            location ={[i]+','+[j]}
         />
         );
     }
@@ -338,7 +346,7 @@ class Board extends React.Component {
             var row = [];
             for(var j = 0; j < GLOBAL_XMAX; j++){
                 row.push(this.renderSquare(x,j));
-                if(j===8)
+                if(j===GLOBAL_XMAX-1)
                     items.push(row);
             }
             
@@ -347,10 +355,11 @@ class Board extends React.Component {
         for (const [index] of items.entries()) {
             board_.push(<div className="board-row">{items[index]}</div>);
         }
-
+        
         return (
         
         <div>
+
         <nav className="navbar navbar-dark dark">
             <a class="navbar-brand" href="#">Pathfinder</a>
             <button className="navbar-toggler reset first"onClick={() => this.toggleWall()}> Add Walls</button>
@@ -363,6 +372,7 @@ class Board extends React.Component {
         <div className="status">{status}</div>
             {board_}
         </div>
+        
         );
     }
 }
