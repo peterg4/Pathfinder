@@ -4,15 +4,26 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css';
 import update from 'immutability-helper'
 import { ControlLabel } from 'react-bootstrap';
-function Square(props) {
-    return (
-      <button id={props.location} className={'square'} onClick={props.onClick} onMouseUp={props.onMouseUp} onMouseDown={props.onMouseDown} onMouseOver={props.onMouseOver}></button>
-    );
-  }
 const GLOBAL_XMAX = 50;
 const GLOBAL_YMAX = 30;
 const GLOBAL_YGOAL = 15;
 const GLOBAL_XGOAL = 35;
+function Square(props) {
+    if(props.y==GLOBAL_YGOAL && props.x == GLOBAL_XGOAL) {
+        return (
+            <button id={props.location} className={'green square'} onClick={props.onClick} onMouseUp={props.onMouseUp} onMouseDown={props.onMouseDown} onMouseOver={props.onMouseOver}></button>
+        );
+    } 
+    if(props.y==5 && props.x ==5){
+        return (
+            <button id={props.location} className={'start square'} onClick={props.onClick} onMouseUp={props.onMouseUp} onMouseDown={props.onMouseDown} onMouseOver={props.onMouseOver}></button>
+        );
+    }
+    return (
+        <button id={props.location} className={'square'} onClick={props.onClick} onMouseUp={props.onMouseUp} onMouseDown={props.onMouseDown} onMouseOver={props.onMouseOver}></button>
+    );
+  }
+
 class Board extends React.Component {
 
     constructor(props) {
@@ -336,6 +347,8 @@ class Board extends React.Component {
             isMouseDown ={this.isMouseDown}
             isWalls={this.isWalls}
             location ={[i]+','+[j]}
+            y = {i}
+            x ={j}
         />
         );
     }
