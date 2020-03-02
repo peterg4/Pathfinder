@@ -76,8 +76,40 @@ class Board extends React.Component {
         }
         this.setState({squares: squares, xStart: 5, yStart: 5});
     }
+    resetWalls(){
+        console.log('clearing...');
+        var squares = [];
+        for (var o = 0; o < this.state.squares.length; o++)
+         squares = this.state.squares.slice();
+        for(var j = 0; j < GLOBAL_YMAX; j++){  
+            var row = [];
+            for(var i = 0; i < GLOBAL_XMAX; i++){
+                if(squares[j][i] !== 'wall'){
+                    squares[j][i] = null;
+                    document.getElementById(j+','+i).className = 'square';
+                    if(i ===  GLOBAL_XGOAL && j ===  GLOBAL_YGOAL) {
+                        row.push('green');
+                        document.getElementById(j+','+i).className = 'green square';
+                    }
+                    if( i===5 && j ===5) {
+                        document.getElementById(j+','+i).className = 'start square';
+                        row.push('start');
+                    }
+                    else { 
+                        row.push(null);
+                    }
+                } else {
+                    row.push(null);
+                }
+            }
+            
+            squares.push(row);
+        }
+        this.setState({squares: squares},);
+    }
 
     BFS(i,j) {
+        this.resetWalls();
         var queue = [[]];
         queue.push([i,j]);
         queue.shift();
@@ -185,16 +217,17 @@ class Board extends React.Component {
                         clearInterval(find_path);
                         }
                     clearInterval(search);
-                    }, 0);
+                    }, 1);
                 }
             } catch {
                 clearInterval(find_path);
                 clearInterval(search);
                 this.resetState();
             }
-        },0);
+        },1);
     }
     A_star(i,j){
+        this.resetWalls();
         var dist_origin;
         var dist_end = Math.abs(GLOBAL_YGOAL-j) + Math.abs(GLOBAL_XGOAL-i);
         var dist;
