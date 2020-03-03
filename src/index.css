@@ -4,10 +4,15 @@ body {
   color: ivory;
 }
 .navbar{
-  height: 75px;
+  padding-left: 53px;
+  height: 70px;
   width: 100%;
   display: block;
   text-align: left;
+}
+a.navbar-brand{
+  font-weight: 800;
+  color: rgba(188, 22, 230, 0.75)!important;
 }
 .navbar-toggler{
   margin-top: 10px;
