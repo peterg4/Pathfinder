@@ -12,8 +12,8 @@ body {
 }
 a.navbar-brand{
   font-weight: 800;
-  color: rgba(188, 22, 230, 0.75)!important;
-  
+  color: rgb(96, 69, 251, .8)!important;
+  /*rgba(131, 37, 155, 0.9)*/
 }
 .logo {
   display: inline;

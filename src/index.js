@@ -43,12 +43,14 @@ class Board extends React.Component {
         var xStart = 5;
         var yStart = 5;
         var isWalls = true;
+        var isRunning = false;
         square_board[xStart][yStart] = 'start';
         this.state = {
             squares: square_board,
             xStart: xStart,
             yStart: yStart,
             isWalls: isWalls,
+            isRunning: isRunning,
         };
     }
     resetState(){
