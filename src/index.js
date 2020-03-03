@@ -54,6 +54,8 @@ class Board extends React.Component {
         };
     }
     resetState(){
+        if(this.isRunning)
+            return;
         console.log('clearing...');
         var squares = [[]];
         squares.shift();
@@ -79,6 +81,8 @@ class Board extends React.Component {
         this.setState({squares: squares, xStart: 5, yStart: 5});
     }
     resetWalls(){
+        if(this.isRunning)
+            return;
         console.log('clearing...');
         var squares = [];
         for (var o = 0; o < this.state.squares.length; o++)
@@ -111,7 +115,10 @@ class Board extends React.Component {
     }
 
     BFS(i,j) {
+        if(this.isRunning)
+            return;
         this.resetWalls();
+        this.isRunning = true;
         var queue = [[]];
         queue.push([i,j]);
         queue.shift();
@@ -220,16 +227,21 @@ class Board extends React.Component {
                         }
                     clearInterval(search);
                     }, 1);
+                    this.isRunning = false;
                 }
             } catch {
                 clearInterval(find_path);
                 clearInterval(search);
+                this.isRunning = false;
                 this.resetState();
             }
         },1);
     }
     A_star(i,j){
+        if(this.isRunning)
+            return;
         this.resetWalls();
+        this.isRunning = true;
         var dist_origin = 0;
         var dist_end = Math.abs(GLOBAL_YGOAL-j) + Math.abs(GLOBAL_XGOAL-i);
         var dist;
@@ -323,10 +335,12 @@ class Board extends React.Component {
                             }
                         clearInterval(search);
                         }, 10);
+                        this.isRunning = false;
                     }
                 } catch {
                     clearInterval(find_path);
                     clearInterval(search);
+                    this.isRunning = false;
                     this.resetState();
                 }
             }, 5);
