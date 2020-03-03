@@ -13,6 +13,15 @@ body {
 a.navbar-brand{
   font-weight: 800;
   color: rgba(188, 22, 230, 0.75)!important;
+  
+}
+.logo {
+  display: inline;
+  border-bottom: black 2px solid;
+}
+img {
+  height: 40px;
+  width: 40px;
 }
 .navbar-toggler{
   margin-top: 10px;

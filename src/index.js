@@ -412,7 +412,7 @@ class Board extends React.Component {
         <div>
 
         <nav className="navbar navbar-dark dark">
-            <a class="navbar-brand" href="#">Pathfinder</a>
+            <a class="navbar-brand" href="#"><img src="path.png"></img> <div className="logo">Pathfinder</div></a>
             <button className="navbar-toggler reset first"onClick={() => this.toggleWall()}> Add Walls</button>
             <button className="navbar-toggler reset"onClick={() => this.toggleWeight()}> Add Weights</button>
             <button className="navbar-toggler reset"onClick={() => this.BFS(this.state.xStart,this.state.yStart)}> Dijsktra's</button>
