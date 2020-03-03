@@ -91,10 +91,10 @@ class Board extends React.Component {
                         row.push('green');
                         document.getElementById(j+','+i).className = 'green square';
                     }
-                    if( i===5 && j ===5) {
-                        document.getElementById(j+','+i).className = 'start square';
-                        row.push('start');
-                    }
+                  //  if( i===5 && j ===5) {
+                  //      document.getElementById(j+','+i).className = 'start square';
+                  //      row.push('start');
+                  //  }
                     else { 
                         row.push(null);
                     }
@@ -228,12 +228,12 @@ class Board extends React.Component {
     }
     A_star(i,j){
         this.resetWalls();
-        var dist_origin;
+        var dist_origin = 0;
         var dist_end = Math.abs(GLOBAL_YGOAL-j) + Math.abs(GLOBAL_XGOAL-i);
         var dist;
         var open_list = [[]];
         open_list.shift();
-        open_list.push([i,j,dist_end]);
+        open_list.push([i,j,0,0]);
         var paths = new Map();
         paths.set(i+','+j,[0,null]);
         let x = i;
@@ -256,38 +256,41 @@ class Board extends React.Component {
                         open_list.shift();
                         return;
                     }
+                    dist_origin = open_list[0][3];
+                    dist_origin++;
+                    console.log(dist_origin);
                     if(open_list.length > 0 && !(y === GLOBAL_YGOAL && x === GLOBAL_XGOAL)) {
                         open_list.shift();
                         if(squares[y][x] !== 'X') { 
                             if(x < GLOBAL_XMAX-1 && squares[y][x+1] !== 'X' && squares[y][x+1] !== 'wall') {
-                                dist_origin = Math.abs(y-j) + Math.abs(x+1-i);
+                            //    dist_origin = Math.abs(y-j) + Math.abs(x+1-i)+1;
                                 dist_end = Math.abs( GLOBAL_YGOAL-y) + Math.abs(GLOBAL_XGOAL-(x+1));
                                 dist = dist_origin + dist_end;
-                                open_list.push([y,x+1,dist]);
+                                open_list.push([y,x+1,dist,dist_origin]);
                                 paths.set(y+','+(x+1),[dist, y+','+x]);
                             }
                             
                             if(x > 0 && squares[y][x-1] !== 'X' && squares[y][x-1] !== 'wall'){
-                                dist_origin = Math.abs(y-j) + Math.abs(x-1-i);
+                          //      dist_origin = Math.abs(y-j) + Math.abs(x-1-i)+1;
                                 dist_end = Math.abs( GLOBAL_YGOAL-y) + Math.abs( GLOBAL_XGOAL-(x-1));
                                 dist = dist_origin + dist_end;
-                                open_list.push([y,x-1,dist]);
+                                open_list.push([y,x-1,dist,dist_origin]);
                                 paths.set(y+','+(x-1),[dist, y+','+x]);
                             }
     
                             if(y < GLOBAL_YMAX-1 && squares[y+1][x] !== 'X' && squares[y+1][x] !== 'wall'){
-                                dist_origin = Math.abs(y+1-j) + Math.abs(x-i);
+                          //      dist_origin = Math.abs(y+1-j) + Math.abs(x-i)+1;
                                 dist_end = Math.abs( GLOBAL_YGOAL-(y+1)) + Math.abs( GLOBAL_XGOAL-x);
                                 dist = dist_origin + dist_end;
-                                open_list.push([y+1,x,dist]);
+                                open_list.push([y+1,x,dist,dist_origin]);
                                 paths.set((y+1)+','+x,[dist, y+','+x]);
                             }
     
                             if(y > 0 && squares[y-1][x] !== 'X' && squares[y-1][x] !== 'wall'){
-                                dist_origin = Math.abs(y-1-j) + Math.abs(x-i);
+                            //    dist_origin = Math.abs(y-1-j) + Math.abs(x-i)+1;
                                 dist_end = Math.abs( GLOBAL_YGOAL-(y-1)) + Math.abs( GLOBAL_XGOAL-x);
                                 dist = dist_origin + dist_end;
-                                open_list.push([y-1,x,dist]);
+                                open_list.push([y-1,x,dist,dist_origin]);
                                 paths.set((y-1)+','+x,[dist, y+','+x]);
                             }
                             
