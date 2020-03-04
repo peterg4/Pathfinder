@@ -12,7 +12,8 @@ body {
 }
 a.navbar-brand{
   font-weight: 800;
-  color: rgb(96, 69, 251, .8)!important;
+  color: #86c232!important;
+ /* color: rgb(96, 69, 251, .8)!important;*/
   /*rgba(131, 37, 155, 0.9)*/
 }
 .logo {
@@ -26,6 +27,7 @@ img {
 .navbar-toggler{
   margin-top: 10px;
   margin-right: 25px;
+  color: #86c232!important;
 }
 .first{
   margin-left: 9.5vw;
@@ -93,7 +95,7 @@ transform: translateZ(0);
 }
 /*classes for actual visualizing*/
 .green{
-  background-color: green;
+  background-color: #86c232;
 }
 .start{
   background-color: blue;
@@ -146,8 +148,9 @@ transform: translateZ(0);
 transform: translateZ(0);
 }
 .wall {
-  background-color: orangered;
-  border: 1px solid orange;
+  background-color: #111111;
+  border: 1px solid #333333;
+
 }
 /*animations  for pathfinding*/
 @keyframes visitedAnimation {
