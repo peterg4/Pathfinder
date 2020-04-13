@@ -2,8 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css';
-import update from 'immutability-helper'
-import { ControlLabel } from 'react-bootstrap';
 const GLOBAL_XMAX = 50;
 const GLOBAL_YMAX = 30;
 const GLOBAL_YGOAL = 15;
