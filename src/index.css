@@ -24,21 +24,14 @@ img {
   width: 40px;
 }
 .navbar-toggler{
-  border-radius: 0px;
-  padding: 1px 2px;
+  border-radius: 72px;
+  padding: 8px 26px;
   margin-right: 25px;
   color: white!important;
-  border: 0px;
-  border-bottom: 2px solid;
   border-color: #61dbfb!important;
 }
 .first{
-  margin-left: 9.5vw;
-}
-.last{
-  float: right;
-  margin-right: 15vw;
-  margin-top: 12px;
+  margin-left: 14.5vw;
 }
 .board-row:after {
   clear: both;

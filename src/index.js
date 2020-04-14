@@ -428,7 +428,7 @@ class Board extends React.Component {
             <button className="navbar-toggler reset"onClick={() => this.toggleWeight()}> Add Weights</button>
             <button className="navbar-toggler reset"onClick={() => this.BFS(this.state.xStart,this.state.yStart)}> Dijsktra's</button>
             <button className="navbar-toggler reset"onClick={() => this.A_star(this.state.xStart,this.state.yStart)}> A*</button>
-            <button className="navbar-toggler reset last"onClick={() => this.resetState()}> Reset Board</button>
+            <button className="navbar-toggler reset"onClick={() => this.resetState()}> Reset Board</button>
         </nav>
              
         <div className="status">{status}</div>
