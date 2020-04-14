@@ -118,6 +118,7 @@ transform: translateZ(0);
   background-color: red;
 }
 .visited{
+  background-color: yellow;
   border: 1px solid yellow;
   animation-name: return;
   animation-duration: 1.0s;
@@ -126,12 +127,13 @@ transform: translateZ(0);
   animation-iteration-count: 1;
   animation-fill-mode: forwards;
   -webkit-transform: translateZ(0);
--moz-transform: translateZ(0);
--ms-transform: translateZ(0);
--o-transform: translateZ(0);
-transform: translateZ(0);
+  -moz-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  -o-transform: translateZ(0);
+  transform: translateZ(0);
 }
 .X{
+  background-color: red;
   border: 1px solid #444444;
   animation-name: visitedAnimation;
   animation-duration: 1.0s;
@@ -142,10 +144,10 @@ transform: translateZ(0);
   animation-fill-mode: forwards;
   animation-play-state: running;
   -webkit-transform: translateZ(0);
--moz-transform: translateZ(0);
--ms-transform: translateZ(0);
--o-transform: translateZ(0);
-transform: translateZ(0);
+  -moz-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  -o-transform: translateZ(0);
+  transform: translateZ(0);
 }
 .wall {
   background-color: #111111;
