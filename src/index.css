@@ -5,29 +5,32 @@ body {
 }
 .navbar{
   padding-left: 53px;
-  height: 70px;
+  height: fit-content;
   width: 100%;
   display: block;
   text-align: left;
 }
 a.navbar-brand{
   font-weight: 800;
-  color: #86c232!important;
- /* color: rgb(96, 69, 251, .8)!important;*/
-  /*rgba(131, 37, 155, 0.9)*/
+  color: #61dbfb!important;
 }
 .logo {
+  color: white;
   display: inline;
-  border-bottom: black 2px solid;
+  border-bottom: #61dbfb 2px solid;
 }
 img {
   height: 40px;
   width: 40px;
 }
 .navbar-toggler{
-  margin-top: 10px;
+  border-radius: 0px;
+  padding: 1px 2px;
   margin-right: 25px;
-  color: #86c232!important;
+  color: white!important;
+  border: 0px;
+  border-bottom: 2px solid;
+  border-color: #61dbfb!important;
 }
 .first{
   margin-left: 9.5vw;
@@ -35,6 +38,7 @@ img {
 .last{
   float: right;
   margin-right: 15vw;
+  margin-top: 12px;
 }
 .board-row:after {
   clear: both;
@@ -83,19 +87,18 @@ img {
 hr{
   border-color: ivory;
 }
+img {
+  filter: invert(77%) sepia(9%) saturate(2546%) hue-rotate(156deg) brightness(101%) contrast(97%);
+}
 .reset:hover{
-  animation: colorAnimation 2s;
-  animation-iteration-count: infinite;
-  animation-direction: alternate;
-  -webkit-transform: translateZ(0);
--moz-transform: translateZ(0);
--ms-transform: translateZ(0);
--o-transform: translateZ(0);
-transform: translateZ(0);
+  border-color: white!important;
+}
+.reset:focus{
+  outline: none;
 }
 /*classes for actual visualizing*/
 .green{
-  background-color: #86c232;
+  background-color: #61dbfb;
 }
 .start{
   background-color: blue;
@@ -109,10 +112,10 @@ transform: translateZ(0);
   animation-fill-mode: forwards;
   animation-play-state: running;
   -webkit-transform: translateZ(0);
--moz-transform: translateZ(0);
--ms-transform: translateZ(0);
--o-transform: translateZ(0);
-transform: translateZ(0);
+  -moz-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  -o-transform: translateZ(0);
+  transform: translateZ(0);
 }
 .current{
   background-color: red;
@@ -152,7 +155,10 @@ transform: translateZ(0);
 .wall {
   background-color: #111111;
   border: 1px solid #333333;
-
+/*  animation: wallAnimation .1s linear 0s 1;*/
+}
+.wall:focus {
+  animation: wallAnimation .2s linear 0s 1;
 }
 /*animations  for pathfinding*/
 @keyframes visitedAnimation {
@@ -232,10 +238,6 @@ transform: translateZ(0);
     transform: scale(1.0);
     background-color: orangered;
   }
-}
-@keyframes colorAnimation {
-  from { background-color: #222222;}
-  to {background-color: rgba(102, 22, 230, 0.75); color: ivory;}
 }
 #root{
   width: 100%;
