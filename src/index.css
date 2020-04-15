@@ -5,7 +5,7 @@ body {
 }
 .navbar{
   padding-left: 53px;
-  height: fit-content;
+  height: auto;
   width: 100%;
   display: block;
   text-align: left;
@@ -44,7 +44,7 @@ img {
   margin: 0 auto;
 }
 .status {
-  margin-bottom: 10px;
+  margin-bottom: 35px;
 }
 .center{
   margin: 0 auto;
@@ -53,11 +53,11 @@ img {
   background: #333333;
   border: 1px solid #444444;
   float: left;
-  height: 30px;
+  height: 25px;
   margin-right: -1px;
   margin-top: -1px;
   padding: 0;
-  width: 30px;
+  width: 25px;
 }
 .dark {
   background-color: #222222;
@@ -133,7 +133,7 @@ img {
   background-color: red;
   border: 1px solid #444444;
   animation-name: visitedAnimation;
-  animation-duration: 1.0s;
+  animation-duration: 1.5s;
   animation-timing-function: ease-out;
   animation-delay: 0;
   animation-direction: alternate;
@@ -147,7 +147,9 @@ img {
   transform: translateZ(0);
 }
 .weight{
-  background-color: rgb(96, 69, 251);
+  background-color: transparent;
+  background-image: url(kg.svg);
+  background-size: cover;
 }
 .wall {
   background-color: #111111;
@@ -203,19 +205,21 @@ img {
 
 @keyframes return {
   0% {
+    border-color: #61dbfb;
     transform: scale(.8);
-    background-color: rgb(92, 92, 1);
+    background-color: #277b90;
     border-radius: 10%;
   }
 
   75% {
     transform: scale(1.1);
-    background-color: greenyellow;
+    background-color: #19d1ffac;
   }
 
   100% {
     transform: scale(1.0);
-    background-color: yellow;
+    background-color: #61dbfb;
+    border-color: #61dbfb;
   }
 }
 

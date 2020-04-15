@@ -2,8 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css';
-const GLOBAL_XMAX = parseInt((window.innerWidth-100)/30);
-const GLOBAL_YMAX = parseInt((window.innerHeight-100)/30);
+const GLOBAL_XMAX = parseInt((window.innerWidth-100)/25);
+const GLOBAL_YMAX = parseInt((window.innerHeight-100)/25);
 const GLOBAL_XGOAL = parseInt(GLOBAL_XMAX*.70);
 const GLOBAL_YGOAL = parseInt(GLOBAL_YMAX/2);
 
@@ -140,6 +140,7 @@ class Board extends React.Component {
                                 return;
                             }
                             if(squares[y][x] == 'weight') {
+                                console.log('here')
                                 squares[y][x] = 'wasweight';
                                 queue.push([y,x]);
                                 this.setState({squares: squares}); 
@@ -165,32 +166,32 @@ class Board extends React.Component {
                                 paths.set((y-1)+','+x,[dist, y+','+x]);
                             }
                         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                            if( x < 36 && squares[y][x+1] == 'weight real_weight') {
+                            if( x < GLOBAL_XMAX-1 && squares[y][x+1] === 'weight real_weight') {
                                 squares[y][x+1] = 'weight';
                                 queue.push([y,x]);
                                 squares[y][x] = null;
-                                isSet =1;
+                                isSet = 1;
                             //    paths.set(y+','+(x+1),[dist, y+','+x]); 
                             }
-                            if(x > 0 && squares[y][x-1] == 'weight real_weight'){
+                            if(x > 0 && squares[y][x-1] === 'weight real_weight'){
                                 squares[y][x-1] = 'weight';
                                 queue.push([y,x]);
                                 squares[y][x] = null;
-                                isSet =1;
+                                isSet = 1;
                         //      paths.set(y+','+(x-1),[dist, y+','+x]);
                             }
-                            if(y < 19 && squares[y+1][x] == 'weight real_weight'){
+                            if(y < GLOBAL_YMAX-1 && squares[y+1][x] === 'weight real_weight'){
                                 squares[y+1][x] = 'weight';
                                 queue.push([y,x]);
                                 squares[y][x] = null;
-                                isSet =1;
+                                isSet = 1;
                             //    paths.set((y+1)+','+x,[dist, y+','+x]);
                             }
-                            if(y > 0 && squares[y-1][x] == 'weight real_weight'){
+                            if(y > 0 && squares[y-1][x] === 'weight real_weight'){
                                 squares[y-1][x] = 'weight';
                                 queue.push([y,x]);
                                 squares[y][x] = null;
-                                isSet =1;
+                                isSet = 1;
                             //    paths.set((y-1)+','+x,[dist, y+','+x]);
                             }
                             if(!isSet)
@@ -431,7 +432,7 @@ class Board extends React.Component {
             <button className="navbar-toggler reset"onClick={() => this.toggleWeight()}> Add Weights</button>
             <button className="navbar-toggler reset"onClick={() => this.BFS(this.state.xStart,this.state.yStart)}> Dijsktra's</button>
             <button className="navbar-toggler reset"onClick={() => this.A_star(this.state.xStart,this.state.yStart)}> A*</button>
-            <button className="navbar-toggler reset"onClick={() => this.resetState()}> Reset Board</button>
+        <button className="navbar-toggler reset"onClick={() => this.resetState()}> Reset Board</button>
         </nav>
              
         <div className="status">{status}</div>
