@@ -85,6 +85,14 @@ img {
 }
 .reset:hover{
   border-color: white!important;
+  animation-name: borderChange;
+  animation-duration: .6s;
+  animation-timing-function: ease-out;
+  animation-delay: 0;
+  animation-direction: alternate;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+  animation-play-state: running;
 }
 .reset:focus{
   outline: none;
@@ -240,6 +248,15 @@ img {
   100% {
     transform: scale(1.0);
     background-color: orangered;
+  }
+}
+@keyframes borderChange {
+  0% {
+    border-radius: 20px;
+  }
+
+  100% {
+    border-radius: 0px;
   }
 }
 #root{
