@@ -152,8 +152,10 @@ img {
   background-size: cover;
 }
 .wall {
-  background-color: #111111;
-  border: 1px solid #333333;
+  background-color: #333;
+  border: 1px solid #333;
+  background-image: url(brick.svg);
+  background-size: cover;
 /*  animation: wallAnimation .1s linear 0s 1;*/
 }
 .wall:focus {
