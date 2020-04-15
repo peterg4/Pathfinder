@@ -4,8 +4,9 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css';
 const GLOBAL_XMAX = parseInt((window.innerWidth-100)/30);
 const GLOBAL_YMAX = parseInt((window.innerHeight-100)/30);
-const GLOBAL_YGOAL = 10;
-const GLOBAL_XGOAL = 10;
+const GLOBAL_XGOAL = parseInt(GLOBAL_XMAX*.70);
+const GLOBAL_YGOAL = parseInt(GLOBAL_YMAX/2);
+
 console.log(GLOBAL_XMAX, GLOBAL_YMAX)
 function Square(props) {
     if(props.y==GLOBAL_YGOAL && props.x == GLOBAL_XGOAL) {
