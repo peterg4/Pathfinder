@@ -109,7 +109,6 @@ class Board extends React.Component {
         }
         this.setState({squares: squares},);
     }
-
     BFS(i,j) {
         if(this.isRunning)
             return;
@@ -347,9 +346,13 @@ class Board extends React.Component {
     }
     toggleWall(){
         this.isWalls = true;
+        document.getElementById("w").className = "navbar-toggler reset first active";
+        document.getElementById("we").className = "navbar-toggler reset";
     }
     toggleWeight(){
         this.isWalls = false;
+        document.getElementById("w").className = "navbar-toggler reset first";
+        document.getElementById("we").className = "navbar-toggler reset active";
     }
     addWall(i,j){
         if(this.isMouseDown){
@@ -432,8 +435,8 @@ class Board extends React.Component {
 
         <nav className="navbar navbar-dark dark">
             <a className="navbar-brand" href="#"><img src="path.png"></img> <div className="logo">Pathfinder</div></a>
-            <button className="navbar-toggler reset first"onClick={() => this.toggleWall()}> Add Walls</button>
-            <button className="navbar-toggler reset"onClick={() => this.toggleWeight()}> Add Weights</button>
+            <button id="w" className="navbar-toggler reset first active"onClick={() => this.toggleWall()}> Add Walls</button>
+            <button id="we" className="navbar-toggler reset"onClick={() => this.toggleWeight()}> Add Weights</button>
             <button className="navbar-toggler reset"onClick={() => this.BFS(this.state.xStart,this.state.yStart)}> Dijsktra's</button>
             <button className="navbar-toggler reset"onClick={() => this.A_star(this.state.xStart,this.state.yStart)}> A*</button>
         <button className="navbar-toggler reset"onClick={() => this.resetState()}> Reset Board</button>

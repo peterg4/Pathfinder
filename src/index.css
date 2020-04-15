@@ -24,7 +24,7 @@ img {
   width: 40px;
 }
 .navbar-toggler{
-  border-radius: 72px;
+  border-radius: 25px;
   padding: 8px 26px;
   margin-right: 25px;
   color: white!important;
@@ -166,6 +166,10 @@ img {
   background-size: cover;
 /*  animation: wallAnimation .1s linear 0s 1;*/
 }
+.active {
+  color: #61dbfb!important;
+  border-radius: 0px;
+}
 .wall:focus {
   animation: wallAnimation .2s linear 0s 1;
 }
@@ -252,7 +256,7 @@ img {
 }
 @keyframes borderChange {
   0% {
-    border-radius: 20px;
+    
   }
 
   100% {
