@@ -146,6 +146,9 @@ img {
   -o-transform: translateZ(0);
   transform: translateZ(0);
 }
+.weight{
+  background-color: rgb(96, 69, 251);
+}
 .wall {
   background-color: #111111;
   border: 1px solid #333333;

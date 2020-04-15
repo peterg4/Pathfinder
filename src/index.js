@@ -90,7 +90,7 @@ class Board extends React.Component {
         for(var j = 0; j < GLOBAL_YMAX; j++){  
             var row = [];
             for(var i = 0; i < GLOBAL_XMAX; i++){
-                if(squares[j][i] !== 'wall'){
+                if(squares[j][i] !== 'wall' && squares[j][i] !== 'weight real_weight'){
                     squares[j][i] = null;
                     document.getElementById(j+','+i).className = 'square';
                     if(i ===  GLOBAL_XGOAL && j ===  GLOBAL_YGOAL) {
@@ -221,7 +221,7 @@ class Board extends React.Component {
                             clearInterval(find_path);
                             }
                         clearInterval(search);
-                        }, 30);
+                        }, 200);
                         this.isRunning = false;
                     }
                 } catch {
@@ -316,19 +316,19 @@ class Board extends React.Component {
                             squares[y][x] = 'visited';
                             var find_path = setInterval(() => { 
                                 if(next !== null && !(x == j && y == i)) {
-                                squares[y][x] = 'visited';
-                                document.getElementById(y+","+x).className = squares[y][x] + " square";
-                                next = paths.get(y+','+x)[1];
-                                if(next!=null){
-                                    next = next.split(',');
-                                    y = next[0];
-                                    x = next[1];
-                                }
+                                    squares[y][x] = 'visited';
+                                    document.getElementById(y+","+x).className = squares[y][x] + " square";
+                                    next = paths.get(y+','+x)[1];
+                                    if(next!=null){
+                                        next = next.split(',');
+                                        y = next[0];
+                                        x = next[1];
+                                    }
                                 } else {
-                                clearInterval(find_path);
+                                    clearInterval(find_path);
                                 }
                             clearInterval(search);
-                            }, 30);
+                            }, 200);
                             this.isRunning = false;
                         }
                     } catch {
@@ -354,6 +354,7 @@ class Board extends React.Component {
             if(squares[i][j] == 'green' || squares[i][j] == 'start'){
             } else if (!this.isWalls && this.isWalls!=undefined){
                 squares[i][j] = 'weight real_weight';
+                document.getElementById(i+","+j).className = 'weight real_weight square';
             } else if (squares[i][j] == 'wall'){
                 squares[i][j] = null;
                 document.getElementById(i+","+j).className = 'square';
