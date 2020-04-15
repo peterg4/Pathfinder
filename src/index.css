@@ -91,11 +91,12 @@ img {
 }
 /*classes for actual visualizing*/
 .green{
+  border: 1px solid #61dbfb;
   background-color: #61dbfb;
 }
 .start{
   background-color: blue;
-  border: 1px #444444 solid;
+  border: 1px rgb(96, 69, 251) solid;
   animation-name: startAnimation;
   animation-duration: .6s;
   animation-timing-function: ease-out;
@@ -117,7 +118,7 @@ img {
   background-color: yellow;
   border: 1px solid yellow;
   animation-name: return;
-  animation-duration: 1.0s;
+  animation-duration: 2.0s;
   animation-timing-function: ease-out;
   animation-delay: 0;
   animation-iteration-count: 1;
@@ -199,9 +200,9 @@ img {
 
 @keyframes return {
   0% {
-    transform: scale(.3);
-    background-color: rgba(0, 0, 66, 0.75);
-    border-radius: 100%;
+    transform: scale(.8);
+    background-color: rgb(92, 92, 1);
+    border-radius: 10%;
   }
 
   75% {

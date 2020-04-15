@@ -2,10 +2,11 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css';
-const GLOBAL_XMAX = 50;
-const GLOBAL_YMAX = 30;
-const GLOBAL_YGOAL = 15;
-const GLOBAL_XGOAL = 35;
+const GLOBAL_XMAX = parseInt((window.innerWidth-100)/30);
+const GLOBAL_YMAX = parseInt((window.innerHeight-100)/30);
+const GLOBAL_YGOAL = 10;
+const GLOBAL_XGOAL = 10;
+console.log(GLOBAL_XMAX, GLOBAL_YMAX)
 function Square(props) {
     if(props.y==GLOBAL_YGOAL && props.x == GLOBAL_XGOAL) {
         return (
@@ -219,7 +220,7 @@ class Board extends React.Component {
                             clearInterval(find_path);
                             }
                         clearInterval(search);
-                        }, 1);
+                        }, 30);
                         this.isRunning = false;
                     }
                 } catch {
@@ -326,7 +327,7 @@ class Board extends React.Component {
                                 clearInterval(find_path);
                                 }
                             clearInterval(search);
-                            }, 10);
+                            }, 30);
                             this.isRunning = false;
                         }
                     } catch {
