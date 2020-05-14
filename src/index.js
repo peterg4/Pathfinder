@@ -123,7 +123,7 @@ class Board extends React.Component {
         paths.set(y+','+x,[0,null]);
         var timer = 8;
         var search = setInterval(() => {
-            for(var ii = 0; ii < timer/8; ii++) {
+            for(var ii = 0; ii < timer/4; ii++) {
                 var squares = [];
                 for (var o = 0; o < this.state.squares.length; o++)
                     squares = this.state.squares.slice();
@@ -171,7 +171,6 @@ class Board extends React.Component {
                                 queue.push([y,x]);
                                 squares[y][x] = null;
                                 isSet = 1;
-                           //     paths.set(y+','+(x+1),[dist, y+','+x]); 
                             }
                             if(x > 0 && squares[y][x-1] === 'weight real_weight'){
                                 squares[y][x-1] = 'weight';
@@ -179,7 +178,6 @@ class Board extends React.Component {
                                 squares[y][x] = null;
                                 isSet = 1;
                                 document.getElementById(y+","+x).className = squares[y][x-1] + " square";
-                          //    paths.set(y+','+(x-1),[dist, y+','+x]);
                             }
                             if(y < GLOBAL_YMAX-1 && squares[y+1][x] === 'weight real_weight'){
                                 squares[y+1][x] = 'weight';
@@ -187,7 +185,6 @@ class Board extends React.Component {
                                 squares[y][x] = null;
                                 isSet = 1;
                                 document.getElementById(y+","+x).className = squares[y+1][x] + " square";
-                         //       paths.set((y+1)+','+x,[dist, y+','+x]);
                             }
                             if(y > 0 && squares[y-1][x] === 'weight real_weight'){
                                 squares[y-1][x] = 'weight';
@@ -195,7 +192,6 @@ class Board extends React.Component {
                                 squares[y][x] = null;
                                 isSet = 1;
                                 document.getElementById(y+","+x).className = squares[y-1][x] + " square";
-                            //    paths.set((y-1)+','+x,[dist, y+','+x]);
                             }
                             if(!isSet)
                                 squares[y][x] = 'X';
@@ -225,7 +221,7 @@ class Board extends React.Component {
                             clearInterval(find_path);
                             }
                         clearInterval(search);
-                        }, 200);
+                        }, 150);
                         this.isRunning = false;
                     }
                 } catch {
@@ -273,31 +269,24 @@ class Board extends React.Component {
                             open_list.shift();
                             if(squares[y][x] !== 'X') { 
                                 if(x < GLOBAL_XMAX-1 && squares[y][x+1] !== 'X' && squares[y][x+1] !== 'wall') {
-                                //    dist_origin = Math.abs(y-j) + Math.abs(x+1-i)+1;
                                     dist_end = Math.abs( GLOBAL_YGOAL-y) + Math.abs(GLOBAL_XGOAL-(x+1));
                                     dist = dist_origin + dist_end;
                                     open_list.push([y,x+1,dist,dist_origin]);
                                     paths.set(y+','+(x+1),[dist, y+','+x]);
                                 }
-                                
                                 if(x > 0 && squares[y][x-1] !== 'X' && squares[y][x-1] !== 'wall'){
-                            //      dist_origin = Math.abs(y-j) + Math.abs(x-1-i)+1;
                                     dist_end = Math.abs( GLOBAL_YGOAL-y) + Math.abs( GLOBAL_XGOAL-(x-1));
                                     dist = dist_origin + dist_end;
                                     open_list.push([y,x-1,dist,dist_origin]);
                                     paths.set(y+','+(x-1),[dist, y+','+x]);
                                 }
-        
                                 if(y < GLOBAL_YMAX-1 && squares[y+1][x] !== 'X' && squares[y+1][x] !== 'wall'){
-                            //      dist_origin = Math.abs(y+1-j) + Math.abs(x-i)+1;
                                     dist_end = Math.abs( GLOBAL_YGOAL-(y+1)) + Math.abs( GLOBAL_XGOAL-x);
                                     dist = dist_origin + dist_end;
                                     open_list.push([y+1,x,dist,dist_origin]);
                                     paths.set((y+1)+','+x,[dist, y+','+x]);
                                 }
-        
                                 if(y > 0 && squares[y-1][x] !== 'X' && squares[y-1][x] !== 'wall'){
-                                //    dist_origin = Math.abs(y-1-j) + Math.abs(x-i)+1;
                                     dist_end = Math.abs( GLOBAL_YGOAL-(y-1)) + Math.abs( GLOBAL_XGOAL-x);
                                     dist = dist_origin + dist_end;
                                     open_list.push([y-1,x,dist,dist_origin]);

@@ -25,6 +25,7 @@ img {
 }
 .navbar-toggler{
   border-radius: 25px;
+  transition: border-radius .6s;
   padding: 8px 26px;
   margin-right: 25px;
   color: white!important;
@@ -85,14 +86,8 @@ img {
 }
 .reset:hover{
   border-color: white!important;
-  animation-name: borderChange;
-  animation-duration: .6s;
-  animation-timing-function: ease-out;
-  animation-delay: 0;
-  animation-direction: alternate;
-  animation-iteration-count: 1;
-  animation-fill-mode: forwards;
-  animation-play-state: running;
+  border-radius: 0px;
+  transition: border-radius .6s;
 }
 .reset:focus{
   outline: none;
@@ -255,15 +250,23 @@ img {
   }
 }
 @keyframes borderChange {
-  0% {
-    
+  from {
+    border-radius: 25px;
   }
 
-  100% {
+  to {
     border-radius: 0px;
+  }
+}
+@keyframes borderBack {
+  from {
+    border-radius: 0px;
+  }
+
+  to {
+    border-radius: 25px;
   }
 }
 #root{
   width: 100%;
 }
-/* Enable hardware acceleration to fix laggy transitions */
