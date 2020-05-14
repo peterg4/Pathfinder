@@ -121,9 +121,9 @@ class Board extends React.Component {
         let y = queue[0][0];
         let x = queue[0][1]
         paths.set(y+','+x,[0,null]);
-        var timer = 8;
+        var timer = 4;
         var search = setInterval(() => {
-            for(var ii = 0; ii < timer/4; ii++) {
+            for(var ii = 0; ii < timer; ii++) {
                 var squares = [];
                 for (var o = 0; o < this.state.squares.length; o++)
                     squares = this.state.squares.slice();
@@ -136,13 +136,6 @@ class Board extends React.Component {
                             var isSet=0;
                             if(squares[y][x] == 'X'){
                                 queue.shift();
-                                return;
-                            }
-                            if(squares[y][x] == 'weight') {
-                                console.log('here')
-                                squares[y][x] = null;
-                                queue.push([y,x]);
-                                this.setState({squares: squares}); 
                                 return;
                             }
                         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -169,32 +162,22 @@ class Board extends React.Component {
                                 squares[y][x+1] = 'weight';
                                 document.getElementById(y+","+x).className = squares[y][x+1] + " square";
                                 queue.push([y,x]);
-                                squares[y][x] = null;
-                                isSet = 1;
                             }
                             if(x > 0 && squares[y][x-1] === 'weight real_weight'){
                                 squares[y][x-1] = 'weight';
                                 queue.push([y,x]);
-                                squares[y][x] = null;
-                                isSet = 1;
-                                document.getElementById(y+","+x).className = squares[y][x-1] + " square";
                             }
                             if(y < GLOBAL_YMAX-1 && squares[y+1][x] === 'weight real_weight'){
                                 squares[y+1][x] = 'weight';
                                 queue.push([y,x]);
-                                squares[y][x] = null;
-                                isSet = 1;
                                 document.getElementById(y+","+x).className = squares[y+1][x] + " square";
                             }
                             if(y > 0 && squares[y-1][x] === 'weight real_weight'){
                                 squares[y-1][x] = 'weight';
                                 queue.push([y,x]);
-                                squares[y][x] = null;
-                                isSet = 1;
                                 document.getElementById(y+","+x).className = squares[y-1][x] + " square";
                             }
-                            if(!isSet)
-                                squares[y][x] = 'X';
+                            squares[y][x] = 'X';
                             squares[i][j] = 'start';
                             document.getElementById(y+","+x).className = squares[y][x] + " square";
                         }
@@ -221,7 +204,7 @@ class Board extends React.Component {
                             clearInterval(find_path);
                             }
                         clearInterval(search);
-                        }, 150);
+                        }, 15);
                         this.isRunning = false;
                     }
                 } catch {
@@ -231,8 +214,7 @@ class Board extends React.Component {
                     this.resetState();
                 }
             }
-        //    timer++;
-        },1);
+        }, 50);
     }
     A_star(i,j){
         if(this.isRunning)
