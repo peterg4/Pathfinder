@@ -5,7 +5,7 @@ import './index.css';
 const GLOBAL_XMAX = parseInt((window.innerWidth-100)/25);
 const GLOBAL_YMAX = parseInt((window.innerHeight-100)/25);
 const GLOBAL_XGOAL = parseInt(GLOBAL_XMAX*.70);
-const GLOBAL_YGOAL = parseInt(GLOBAL_YMAX/2);
+const GLOBAL_YGOAL = parseInt(GLOBAL_YMAX*(3/4));
 
 console.log(GLOBAL_XMAX, GLOBAL_YMAX)
 function Square(props) {
@@ -108,6 +108,44 @@ class Board extends React.Component {
             squares.push(row);
         }
         this.setState({squares: squares},);
+    }
+    async generateMaze(midx, midy, xmax, ymax, xmin, ymin) {
+        if((xmax-xmin)*(ymax-ymin) <= 36) {
+           // this.setState({squares: squares},);
+            return;
+        }
+        console.log((xmax-xmin)*(ymax-ymin));
+        var squares =[];
+        for (var o = 0; o < this.state.squares.length; o++)
+            squares = this.state.squares.slice();
+        var i = xmin;
+        var j = ymin;
+       
+        var divide =  setInterval(() => {
+            var hole = Math.random();
+            if(i < xmax) {
+                if(!(midy == this.state.xStart && i==this.state.yStart) && !(midy == GLOBAL_YGOAL && i == GLOBAL_XGOAL) && hole>3/(xmax-xmin)) {
+                    squares[midy][i] = 'wall';
+                    document.getElementById(midy+','+i).className = 'wall square';
+                }
+                i++;
+            } else if(j < ymax) {
+                if(!(midx == this.state.yStart && j==this.state.xStart) && !(midx == GLOBAL_XGOAL && j == GLOBAL_YGOAL) && hole>3/(ymax-ymin)) {
+                    squares[j][midx] = 'wall';
+                    document.getElementById(j+','+midx).className = 'wall square';
+                }
+                j++;
+            } else {
+                this.generateMaze(parseInt(midx-(xmax-midx)/2), parseInt(midy-(ymax-midy)/2), midx, midy, xmin, ymin);
+                this.generateMaze(parseInt(midx+(xmax-midx)/2), parseInt(midy-(ymax-midy)/2), xmax, midy, midx, ymin);
+                this.generateMaze(parseInt(midx+(xmax-midx)/2), parseInt(midy+(ymax-midy)/2), xmax, ymax, midx, midy);
+                this.generateMaze(parseInt(midx-(xmax-midx)/2), parseInt(midy+(ymax-midy)/2), midx, ymax, xmin, midy);
+                clearInterval(divide);
+                return;
+            }
+        }, 15)
+
+        
     }
     BFS(i,j) {
         if(this.isRunning)
@@ -410,7 +448,8 @@ class Board extends React.Component {
             <button id="we" className="navbar-toggler reset"onClick={() => this.toggleWeight()}> Add Weights</button>
             <button className="navbar-toggler reset"onClick={() => this.BFS(this.state.xStart,this.state.yStart)}> Dijsktra's</button>
             <button className="navbar-toggler reset"onClick={() => this.A_star(this.state.xStart,this.state.yStart)}> A*</button>
-        <button className="navbar-toggler reset"onClick={() => this.resetState()}> Reset Board</button>
+            <button className="navbar-toggler reset"onClick={() => this.resetState()}> Reset Board</button>
+            <button className="navbar-toggler reset"onClick={() => this.generateMaze(parseInt(GLOBAL_XMAX/2), parseInt(GLOBAL_YMAX/2), GLOBAL_XMAX, GLOBAL_YMAX, 0, 0)}> Generate Maze</button>
         </nav>
              
         <div className="status">{status}</div>
