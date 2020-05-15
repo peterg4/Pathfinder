@@ -109,11 +109,16 @@ class Board extends React.Component {
         }
         this.setState({squares: squares},);
     }
+    async StartMaze(midx, midy, xmax, ymax, xmin, ymin) {
+        await this.resetState();
+        this.generateMaze(midx, midy, xmax, ymax, xmin, ymin);
+    }
     async generateMaze(midx, midy, xmax, ymax, xmin, ymin) {
         if((xmax-xmin)*(ymax-ymin) <= 36) {
-           // this.setState({squares: squares},);
             return;
         }
+        await this.generateMaze(parseInt(midx-(xmax-midx)/2), parseInt(midy-(ymax-midy)/2), midx, midy, xmin, ymin);
+        this.generateMaze(parseInt(midx+(xmax-midx)/2), parseInt(midy-(ymax-midy)/2), xmax, midy, midx, ymin);
         console.log((xmax-xmin)*(ymax-ymin));
         var squares =[];
         for (var o = 0; o < this.state.squares.length; o++)
@@ -136,16 +141,14 @@ class Board extends React.Component {
                 }
                 j++;
             } else {
-                this.generateMaze(parseInt(midx-(xmax-midx)/2), parseInt(midy-(ymax-midy)/2), midx, midy, xmin, ymin);
-                this.generateMaze(parseInt(midx+(xmax-midx)/2), parseInt(midy-(ymax-midy)/2), xmax, midy, midx, ymin);
+                
+                
                 this.generateMaze(parseInt(midx+(xmax-midx)/2), parseInt(midy+(ymax-midy)/2), xmax, ymax, midx, midy);
                 this.generateMaze(parseInt(midx-(xmax-midx)/2), parseInt(midy+(ymax-midy)/2), midx, ymax, xmin, midy);
                 clearInterval(divide);
                 return;
             }
         }, 10)
-
-        
     }
     BFS(i,j) {
         if(this.isRunning)
@@ -449,7 +452,7 @@ class Board extends React.Component {
             <button className="navbar-toggler reset"onClick={() => this.BFS(this.state.xStart,this.state.yStart)}> Dijsktra's</button>
             <button className="navbar-toggler reset"onClick={() => this.A_star(this.state.xStart,this.state.yStart)}> A*</button>
             <button className="navbar-toggler reset"onClick={() => this.resetState()}> Reset Board</button>
-            <button className="navbar-toggler reset"onClick={() => this.generateMaze(parseInt(GLOBAL_XMAX/2), parseInt(GLOBAL_YMAX/2), GLOBAL_XMAX, GLOBAL_YMAX, 0, 0)}> Generate Maze</button>
+            <button className="navbar-toggler reset"onClick={() => this.StartMaze(parseInt(GLOBAL_XMAX/2), parseInt(GLOBAL_YMAX/2), GLOBAL_XMAX, GLOBAL_YMAX, 0, 0)}> Generate Maze</button>
         </nav>
              
         <div className="status">{status}</div>
