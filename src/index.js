@@ -252,7 +252,6 @@ class Board extends React.Component {
                     clearInterval(find_path);
                     clearInterval(search);
                     this.isRunning = false;
-                    this.resetState();
                 }
             }
         }, 50);
@@ -351,7 +350,6 @@ class Board extends React.Component {
                         clearInterval(find_path);
                         clearInterval(search);
                         this.isRunning = false;
-                        this.resetState();
                     }
                 }
             }, 1);
