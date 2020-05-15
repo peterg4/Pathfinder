@@ -143,7 +143,7 @@ class Board extends React.Component {
                 clearInterval(divide);
                 return;
             }
-        }, 15)
+        }, 10)
 
         
     }

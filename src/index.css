@@ -155,11 +155,11 @@ img {
   background-size: cover;
 }
 .wall {
-  background-color: #333;
+  background-color: #111;
   border: 1px solid #333;
-  background-image: url(brick.svg);
+ /* background-image: url(brick.svg);*/
   background-size: cover;
-/*  animation: wallAnimation .1s linear 0s 1;*/
+  animation: wallAnimation .6s linear 0s 1;
 }
 .active {
   color: #61dbfb!important;
@@ -234,19 +234,18 @@ img {
 
 @keyframes wallAnimation {
   0% {
-    transform: scale(.3);
+    transform: scale(.8);
     background-color: rgba(0, 0, 66, 0.75);
-    border-radius: 100%;
   }
 
   75% {
     transform: scale(1.1);
-    background-color: orange;
+    background-color: rgba(32, 0, 66, 0.87);
   }
 
   100% {
     transform: scale(1.0);
-    background-color: orangered;
+    background-color: black;
   }
 }
 @keyframes borderChange {
