@@ -5,6 +5,8 @@ body {
 }
 .navbar{
   padding-left: 53px;
+  padding-top: 15px;
+  padding-bottom: 15px;
   height: auto;
   width: 100%;
   display: block;
@@ -13,6 +15,8 @@ body {
 a.navbar-brand{
   font-weight: 800;
   color: #61dbfb!important;
+  position: absolute;
+  top: 8px;
 }
 .logo {
   color: white;
@@ -31,8 +35,10 @@ img {
   color: white!important;
   border-color: #61dbfb!important;
 }
-.first{
-  margin-left: 14.5vw;
+.nav-center{
+  margin-left: auto;
+  margin-right: auto;
+  width: fit-content;
 }
 .board-row:after {
   clear: both;

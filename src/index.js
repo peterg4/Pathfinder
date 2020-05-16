@@ -125,19 +125,25 @@ class Board extends React.Component {
             squares = this.state.squares.slice();
         var i = xmin;
         var j = ymin;
-       
+        var hole_countx = 0;
+        var hole_county = 0;
         var divide =  setInterval(() => {
+
             var hole = Math.random();
             if(i < xmax) {
-                if(!(midy == this.state.xStart && i==this.state.yStart) && !(midy == GLOBAL_YGOAL && i == GLOBAL_XGOAL) && hole>3/(xmax-xmin)) {
+                if(!(midy == this.state.xStart && i==this.state.yStart) && !(midy == GLOBAL_YGOAL && i == GLOBAL_XGOAL) /*&& hole>3/(xmax-xmin) || hole_countx > 3*/) {
                     squares[midy][i] = 'wall';
                     document.getElementById(midy+','+i).className = 'wall square';
+                } else {
+                    hole_countx++;
                 }
                 i++;
             } else if(j < ymax) {
-                if(!(midx == this.state.yStart && j==this.state.xStart) && !(midx == GLOBAL_XGOAL && j == GLOBAL_YGOAL) && hole>3/(ymax-ymin)) {
+                if(!(midx == this.state.yStart && j==this.state.xStart) && !(midx == GLOBAL_XGOAL && j == GLOBAL_YGOAL)/* && hole>3/(ymax-ymin) || hole_county > 3*/) {
                     squares[j][midx] = 'wall';
                     document.getElementById(j+','+midx).className = 'wall square';
+                } else {
+                    hole_county++;
                 }
                 j++;
             } else {
@@ -445,12 +451,14 @@ class Board extends React.Component {
 
         <nav className="navbar navbar-dark dark">
             <a className="navbar-brand" href="#"><img src="path.png"></img> <div className="logo">Pathfinder</div></a>
-            <button id="w" className="navbar-toggler reset first active"onClick={() => this.toggleWall()}> Add Walls</button>
-            <button id="we" className="navbar-toggler reset"onClick={() => this.toggleWeight()}> Add Weights</button>
-            <button className="navbar-toggler reset"onClick={() => this.BFS(this.state.xStart,this.state.yStart)}> Dijsktra's</button>
-            <button className="navbar-toggler reset"onClick={() => this.A_star(this.state.xStart,this.state.yStart)}> A*</button>
-            <button className="navbar-toggler reset"onClick={() => this.resetState()}> Reset Board</button>
-            <button className="navbar-toggler reset"onClick={() => this.StartMaze(parseInt(GLOBAL_XMAX/2), parseInt(GLOBAL_YMAX/2), GLOBAL_XMAX, GLOBAL_YMAX, 0, 0)}> Generate Maze</button>
+            <div className="nav-center">
+                <button id="w" className="navbar-toggler reset active"onClick={() => this.toggleWall()}> Add Walls</button>
+                <button id="we" className="navbar-toggler reset"onClick={() => this.toggleWeight()}> Add Weights</button>
+                <button className="navbar-toggler reset"onClick={() => this.BFS(this.state.xStart,this.state.yStart)}> Dijsktra's</button>
+                <button className="navbar-toggler reset"onClick={() => this.A_star(this.state.xStart,this.state.yStart)}> A*</button>
+                <button className="navbar-toggler reset"onClick={() => this.resetState()}> Reset Board</button>
+                <button className="navbar-toggler reset"onClick={() => this.StartMaze(parseInt(GLOBAL_XMAX/2), parseInt(GLOBAL_YMAX/2), GLOBAL_XMAX, GLOBAL_YMAX, 0, 0)}> Generate Maze</button>
+            </div>
         </nav>
              
         <div className="status">{status}</div>
