@@ -6,7 +6,9 @@ const GLOBAL_XMAX = parseInt((window.innerWidth-100)/25);
 const GLOBAL_YMAX = parseInt((window.innerHeight-100)/25);
 const GLOBAL_XGOAL = parseInt(GLOBAL_XMAX*.70);
 const GLOBAL_YGOAL = parseInt(GLOBAL_YMAX*(3/4));
-
+function randomIntFromInterval(min, max) { // min and max included 
+    return Math.floor(Math.random() * (max - min + 1) + min);
+}
 console.log(GLOBAL_XMAX, GLOBAL_YMAX)
 function Square(props) {
     if(props.y==GLOBAL_YGOAL && props.x == GLOBAL_XGOAL) {
@@ -111,46 +113,52 @@ class Board extends React.Component {
     }
     async StartMaze(midx, midy, xmax, ymax, xmin, ymin) {
         await this.resetState();
+        midx = randomIntFromInterval(1, xmax-1);
+        midy = randomIntFromInterval(1, ymax-1);
         this.generateMaze(midx, midy, xmax, ymax, xmin, ymin);
     }
     async generateMaze(midx, midy, xmax, ymax, xmin, ymin) {
-        if((xmax-xmin)*(ymax-ymin) <= 36) {
+        if((xmax-xmin) < 4 || ymax-ymin < 4) {
             return;
         }
-        await this.generateMaze(parseInt(midx-(xmax-midx)/2), parseInt(midy-(ymax-midy)/2), midx, midy, xmin, ymin);
-        this.generateMaze(parseInt(midx+(xmax-midx)/2), parseInt(midy-(ymax-midy)/2), xmax, midy, midx, ymin);
+        var newmidx = randomIntFromInterval(xmin+2, midx-2);
+        var newmidy = randomIntFromInterval(ymin+2, midy-2);
+        await this.generateMaze(newmidx, newmidy, midx, midy, xmin, ymin);
+        newmidx = randomIntFromInterval(midx+2, xmax-2);
+        newmidy = randomIntFromInterval(ymin+2, midy-2);
+        this.generateMaze(newmidx, newmidy, xmax, midy, midx, ymin);
         console.log((xmax-xmin)*(ymax-ymin));
         var squares =[];
         for (var o = 0; o < this.state.squares.length; o++)
             squares = this.state.squares.slice();
-        var i = xmin;
-        var j = ymin;
+        var i = xmin+2;
+        var j = ymin+2;
         var hole_countx = 0;
         var hole_county = 0;
+        var holex =  randomIntFromInterval(0, midx-1);
+        var holex2 = randomIntFromInterval(midx+1, xmax);
+        var holey = randomIntFromInterval(0, midy-1);
         var divide =  setInterval(() => {
 
-            var hole = Math.random();
-            if(i < xmax) {
-                if(!(midy == this.state.xStart && i==this.state.yStart) && !(midy == GLOBAL_YGOAL && i == GLOBAL_XGOAL) /*&& hole>3/(xmax-xmin) || hole_countx > 3*/) {
+            if(i < xmax-2) {
+                if(!(midy == this.state.xStart && i==this.state.yStart) && !(midy == GLOBAL_YGOAL && i == GLOBAL_XGOAL) && i!=holex && i!=holex2) {
                     squares[midy][i] = 'wall';
                     document.getElementById(midy+','+i).className = 'wall square';
-                } else {
-                    hole_countx++;
-                }
+                } 
                 i++;
-            } else if(j < ymax) {
-                if(!(midx == this.state.yStart && j==this.state.xStart) && !(midx == GLOBAL_XGOAL && j == GLOBAL_YGOAL)/* && hole>3/(ymax-ymin) || hole_county > 3*/) {
+            } else if(j < ymax-2) {
+                if(!(midx == this.state.yStart && j==this.state.xStart) && !(midx == GLOBAL_XGOAL && j == GLOBAL_YGOAL) && j!=holey) {
                     squares[j][midx] = 'wall';
                     document.getElementById(j+','+midx).className = 'wall square';
-                } else {
-                    hole_county++;
                 }
                 j++;
             } else {
-                
-                
-                this.generateMaze(parseInt(midx+(xmax-midx)/2), parseInt(midy+(ymax-midy)/2), xmax, ymax, midx, midy);
-                this.generateMaze(parseInt(midx-(xmax-midx)/2), parseInt(midy+(ymax-midy)/2), midx, ymax, xmin, midy);
+                newmidx = randomIntFromInterval(midx+2, xmax-2);
+                newmidy = randomIntFromInterval(midy+2, ymax-2);
+                this.generateMaze(newmidx, newmidy, xmax, ymax, midx, midy);
+                newmidx = randomIntFromInterval(xmin+2, midx-2);
+                newmidy = randomIntFromInterval(midy+2, ymax-2);
+                this.generateMaze(newmidx, newmidy, midx, ymax, xmin, midy);
                 clearInterval(divide);
                 return;
             }
