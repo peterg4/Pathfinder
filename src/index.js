@@ -153,6 +153,18 @@ class Board extends React.Component {
         var squares =[];
         for (var o = 0; o < this.state.squares.length; o++)
             squares = this.state.squares.slice();
+        if(xmin == 0){
+            xmin--
+        }
+        if(xmax == GLOBAL_XMAX){
+            xmax++;
+        }
+        if(ymin == 0){
+            ymin--
+        }
+        if(ymax == GLOBAL_XMAX){
+            ymax++;
+        }
         var i = xmin+2;
         var j = ymin+2;
         var hole_countx = 0;
