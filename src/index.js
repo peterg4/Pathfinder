@@ -113,9 +113,31 @@ class Board extends React.Component {
     }
     async StartMaze(midx, midy, xmax, ymax, xmin, ymin) {
         await this.resetState();
-        midx = randomIntFromInterval(1, xmax-1);
-        midy = randomIntFromInterval(1, ymax-1);
-        this.generateMaze(midx, midy, xmax, ymax, xmin, ymin);
+        var squares =[];
+        for (var o = 0; o < this.state.squares.length; o++)
+            squares = this.state.squares.slice();
+        var i = 0;
+        var j = 0;
+        var initialize = setInterval(() => {
+            if(i < xmax) {
+                squares[0][i] = 'wall';
+                squares[ymax-1][i] = 'wall';
+                document.getElementById(0+','+i).className = 'wall square';
+                document.getElementById((ymax-1)+','+i).className = 'wall square';
+                i++;
+            } else if(j < ymax) {
+                squares[j][0] = 'wall';
+                squares[j][xmax-1] = 'wall';
+                document.getElementById(j+','+0).className = 'wall square';
+                document.getElementById(j+','+(xmax-1)).className = 'wall square';
+                j++;
+            }else {
+                clearInterval(initialize);
+                midx = randomIntFromInterval(2, xmax-2);
+                midy = randomIntFromInterval(2, ymax-2);
+                this.generateMaze(midx, midy, xmax, ymax, xmin, ymin);
+            }
+        })
     }
     async generateMaze(midx, midy, xmax, ymax, xmin, ymin) {
         if((xmax-xmin) < 4 || ymax-ymin < 4) {
