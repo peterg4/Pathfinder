@@ -133,48 +133,39 @@ class Board extends React.Component {
                 j++;
             }else {
                 clearInterval(initialize);
-                midx = randomIntFromInterval(2, xmax-2);
-                midy = randomIntFromInterval(2, ymax-2);
+                midx = randomIntFromInterval(5, xmax-5);
+                midy = randomIntFromInterval(5, ymax-5);
                 this.generateMaze(midx, midy, xmax, ymax, xmin, ymin);
             }
         })
     }
     async generateMaze(midx, midy, xmax, ymax, xmin, ymin) {
-        if((xmax-xmin) < 4 || ymax-ymin < 4) {
+        if((xmax-xmin) < 4 || ymax-ymin < 4 || (ymax+1 >= GLOBAL_YMAX && ymax-ymin < 5)) {
             return;
         }
         var newmidx = randomIntFromInterval(xmin+2, midx-2);
         var newmidy = randomIntFromInterval(ymin+2, midy-2);
         await this.generateMaze(newmidx, newmidy, midx, midy, xmin, ymin);
-        newmidx = randomIntFromInterval(midx+2, xmax-2);
-        newmidy = randomIntFromInterval(ymin+2, midy-2);
-        this.generateMaze(newmidx, newmidy, xmax, midy, midx, ymin);
-        console.log((xmax-xmin)*(ymax-ymin));
         var squares =[];
         for (var o = 0; o < this.state.squares.length; o++)
             squares = this.state.squares.slice();
-        if(xmin == 0){
-            xmin--
-        }
-        if(xmax == GLOBAL_XMAX){
-            xmax++;
-        }
-        if(ymin == 0){
-            ymin--
-        }
-        if(ymax == GLOBAL_XMAX){
-            ymax++;
-        }
+        var xoff = 0;
+        var yoff = 0;
+        if(xmin == 0) xoff--;
+        if(xmax == GLOBAL_XMAX) xoff++;
+        if(ymin == 0) yoff--;
+        if(ymax == GLOBAL_XMAX) yoff++;
         var i = xmin+2;
-        var j = ymin+2;
-        var hole_countx = 0;
-        var hole_county = 0;
+        var j = ymin+1;
         var holex =  randomIntFromInterval(0, midx-1);
-        var holex2 = randomIntFromInterval(midx+1, xmax);
+        var holex2 = randomIntFromInterval(midx+1, xmax+xoff+-1);
         var holey = randomIntFromInterval(0, midy-1);
+        newmidx = randomIntFromInterval(midx+2, xmax-2);
+        newmidy = randomIntFromInterval(ymin+2, midy-2);
+        this.generateMaze(newmidx, newmidy, xmax, midy, midx, ymin);
         var divide =  setInterval(() => {
 
-            if(i < xmax-2) {
+            if(i < xmax-1) {
                 if(!(midy == this.state.xStart && i==this.state.yStart) && !(midy == GLOBAL_YGOAL && i == GLOBAL_XGOAL) && i!=holex && i!=holex2) {
                     squares[midy][i] = 'wall';
                     document.getElementById(midy+','+i).className = 'wall square';
