@@ -135,43 +135,37 @@ class Board extends React.Component {
                 clearInterval(initialize);
                 midx = randomIntFromInterval(5, xmax-5);
                 midy = randomIntFromInterval(5, ymax-5);
-                this.generateMaze(midx, midy, xmax, ymax, xmin, ymin);
+                this.generateMaze(midx, midy, xmax-1, ymax-1, xmin+1, ymin+1);
             }
         })
     }
     async generateMaze(midx, midy, xmax, ymax, xmin, ymin) {
-        if((xmax-xmin) < 4 || ymax-ymin < 4 || (ymax+1 >= GLOBAL_YMAX && ymax-ymin < 5)) {
+        if((xmax-xmin) < 3 || ymax-ymin < 3) {
             return;
         }
         var newmidx = randomIntFromInterval(xmin+2, midx-2);
         var newmidy = randomIntFromInterval(ymin+2, midy-2);
-        await this.generateMaze(newmidx, newmidy, midx, midy, xmin, ymin);
+        await this.generateMaze(newmidx, newmidy, midx-1, midy-1, xmin, ymin);
         var squares =[];
         for (var o = 0; o < this.state.squares.length; o++)
             squares = this.state.squares.slice();
-        var xoff = 0;
-        var yoff = 0;
-        if(xmin == 0) xoff--;
-        if(xmax == GLOBAL_XMAX) xoff++;
-        if(ymin == 0) yoff--;
-        if(ymax == GLOBAL_XMAX) yoff++;
-        var i = xmin+2;
-        var j = ymin+1;
-        var holex =  randomIntFromInterval(0, midx-1);
-        var holex2 = randomIntFromInterval(midx+1, xmax+xoff+-1);
-        var holey = randomIntFromInterval(0, midy-1);
+        var i = xmin;
+        var j = ymin;
+        var holex =  randomIntFromInterval(xmin, midx);
+        var holex2 = randomIntFromInterval(midx, xmax);
+        var holey = randomIntFromInterval(ymin+2, midy);
         newmidx = randomIntFromInterval(midx+2, xmax-2);
         newmidy = randomIntFromInterval(ymin+2, midy-2);
-        this.generateMaze(newmidx, newmidy, xmax, midy, midx, ymin);
+        this.generateMaze(newmidx, newmidy, xmax, midy-1, midx+1, ymin);
         var divide =  setInterval(() => {
 
-            if(i < xmax-1) {
+            if(i < xmax) {
                 if(!(midy == this.state.xStart && i==this.state.yStart) && !(midy == GLOBAL_YGOAL && i == GLOBAL_XGOAL) && i!=holex && i!=holex2) {
                     squares[midy][i] = 'wall';
                     document.getElementById(midy+','+i).className = 'wall square';
                 } 
                 i++;
-            } else if(j < ymax-2) {
+            } else if(j < ymax) {
                 if(!(midx == this.state.yStart && j==this.state.xStart) && !(midx == GLOBAL_XGOAL && j == GLOBAL_YGOAL) && j!=holey) {
                     squares[j][midx] = 'wall';
                     document.getElementById(j+','+midx).className = 'wall square';
@@ -180,14 +174,90 @@ class Board extends React.Component {
             } else {
                 newmidx = randomIntFromInterval(midx+2, xmax-2);
                 newmidy = randomIntFromInterval(midy+2, ymax-2);
-                this.generateMaze(newmidx, newmidy, xmax, ymax, midx, midy);
+                this.generateMaze(newmidx, newmidy, xmax, ymax, midx+1, midy+1);
                 newmidx = randomIntFromInterval(xmin+2, midx-2);
                 newmidy = randomIntFromInterval(midy+2, ymax-2);
-                this.generateMaze(newmidx, newmidy, midx, ymax, xmin, midy);
+                this.generateMaze(newmidx, newmidy, midx-1, ymax, xmin, midy+1);
                 clearInterval(divide);
                 return;
             }
         }, 10)
+    }
+    async Prims() {
+        await this.resetState();
+        var squares =[];
+        for (var o = 0; o < this.state.squares.length; o++)
+            squares = this.state.squares.slice();
+        var i = 0;
+        var j = 0;
+        var initialize = setInterval(() => {
+            if(i < GLOBAL_XMAX) {
+                for(var j = 0; j < GLOBAL_YMAX; j++) {
+                    if(!(i == GLOBAL_XGOAL && j == GLOBAL_YGOAL) && !(i==this.state.xStart && j == this.state.yStart)) {
+                        squares[j][i] = 'wall';
+                        document.getElementById((j)+','+i).className = 'wall square';
+                    }
+                }
+                i++;
+            }else {
+                clearInterval(initialize);
+                var walls = [];
+                var x = 1;
+                var y = 1;
+                walls.push([y,x+2]);
+                walls.push([y+2,x])
+                squares[1][1] = null;
+                document.getElementById(1+','+1).className = 'square';
+                var carveMaze = setInterval(() => {
+                    if(walls.length != 0) {
+                        var wall = randomIntFromInterval(0, walls.length-1);
+                        x = walls[wall][1];
+                        y = walls[wall][0];
+                        squares[y][x] = null;
+                        if(y-2 > 0 && squares[y-2][x] == null && squares[y-1][x] != null) {
+                            squares[y][x] = null;
+                            document.getElementById(y+','+x).className = 'square';
+                            squares[y-1][x] = null;
+                            document.getElementById(y-1+','+x).className = 'square';
+                            if( x+2 < GLOBAL_XMAX && squares[y][x+1] != null && !(x+2 == this.state.xStart && y == this.state.yStart) && !(x+2 == GLOBAL_XGOAL && y == GLOBAL_YGOAL) && squares[y][x+2] != null && !this.checkQueue(walls,y,x+2)) walls.push([y,x+2]);
+                            if( y+2 < GLOBAL_YMAX && squares[y+1][x] != null && !(x == this.state.xStart && y+2 == this.state.yStart) && !(x == GLOBAL_XGOAL && y+2 == GLOBAL_YGOAL) && squares[y+2][x] != null && !this.checkQueue(walls,y+2,x)) walls.push([y+2,x]);
+                            if( x-2 > 0 && squares[y][x-1] != null && !(x-2 == this.state.xStart && y == this.state.yStart) && !(x-2 == GLOBAL_XGOAL && y == GLOBAL_YGOAL) && squares[y][x-2] != null && !this.checkQueue(walls,y,x-2)) walls.push([y,x-2]);
+                            if( y-2 > 0 && squares[y-1][x] != null && !(x == this.state.xStart && y-2 == this.state.yStart) && !(x == GLOBAL_XGOAL && y-2 == GLOBAL_YGOAL) && squares[y-2][x] != null && !this.checkQueue(walls,y-2,x)) walls.push([y-2,x]);
+                        } else if(x-2 > 0 && squares[y][x-2] == null && squares[y][x-1] != null) {
+                            squares[y][x] = null;
+                            document.getElementById(y+','+(x-1)).className = 'square';
+                            squares[y][x-1] = null;
+                            document.getElementById(y+','+x).className = 'square';
+                            if( x+2 < GLOBAL_XMAX && squares[y][x+1] != null && !(x+2 == this.state.xStart && y == this.state.yStart) && !(x+2 == GLOBAL_XGOAL && y == GLOBAL_YGOAL) && squares[y][x+2] != null && !this.checkQueue(walls,y,x+2)) walls.push([y,x+2]);
+                            if( y+2 < GLOBAL_YMAX && squares[y+1][x] != null && !(x == this.state.xStart && y+2 == this.state.yStart) && !(x == GLOBAL_XGOAL && y+2 == GLOBAL_YGOAL) && squares[y+2][x] != null && !this.checkQueue(walls,y+2,x)) walls.push([y+2,x]);
+                            if( x-2 > 0 && squares[y][x-1] != null && !(x-2 == this.state.xStart && y == this.state.yStart) && !(x-2 == GLOBAL_XGOAL && y == GLOBAL_YGOAL) && squares[y][x-2] != null && !this.checkQueue(walls,y,x-2)) walls.push([y,x-2]);
+                            if( y-2 > 0 && squares[y-1][x] != null && !(x == this.state.xStart && y-2 == this.state.yStart) && !(x == GLOBAL_XGOAL && y-2 == GLOBAL_YGOAL) && squares[y-2][x] != null && !this.checkQueue(walls,y-2,x)) walls.push([y-2,x]);
+                        } else if(x+2 < GLOBAL_XMAX && squares[y][x+2] == null && squares[y][x+1] != null) {
+                            squares[y][x] = null;
+                            document.getElementById(y+','+(x+1)).className = 'square';
+                            squares[y][x+1] = null;
+                            document.getElementById(y+','+x).className = 'square';
+                            if( x+2 < GLOBAL_XMAX && squares[y][x+1] != null && !(x+2 == this.state.xStart && y == this.state.yStart) && !(x+2 == GLOBAL_XGOAL && y == GLOBAL_YGOAL) && squares[y][x+2] != null && !this.checkQueue(walls,y,x+2)) walls.push([y,x+2]);
+                            if( y+2 < GLOBAL_YMAX && squares[y+1][x] != null && !(x == this.state.xStart && y+2 == this.state.yStart) && !(x == GLOBAL_XGOAL && y+2 == GLOBAL_YGOAL) && squares[y+2][x] != null && !this.checkQueue(walls,y+2,x)) walls.push([y+2,x]);
+                            if( x-2 > 0 && squares[y][x-1] != null && !(x-2 == this.state.xStart && y == this.state.yStart) && !(x-2 == GLOBAL_XGOAL && y == GLOBAL_YGOAL) && squares[y][x-2] != null && !this.checkQueue(walls,y,x-2)) walls.push([y,x-2]);
+                            if( y-2 > 0 && squares[y-1][x] != null && !(x == this.state.xStart && y-2 == this.state.yStart) && !(x == GLOBAL_XGOAL && y-2 == GLOBAL_YGOAL) && squares[y-2][x] != null && !this.checkQueue(walls,y-2,x)) walls.push([y-2,x]);
+                        } else if(y+2 < GLOBAL_YMAX && squares[y+2][x] == null && squares[y+1][x] != null) {
+                            squares[y][x] = null;
+                            document.getElementById(y+','+(x-1)).className = 'square';
+                            squares[y][x-1] = null;
+                            document.getElementById(y+','+x).className = 'square';
+                            if( x+2 < GLOBAL_XMAX && squares[y][x+1] != null && !(x+2 == this.state.xStart && y == this.state.yStart) && !(x+2 == GLOBAL_XGOAL && y == GLOBAL_YGOAL) && squares[y][x+2] != null && !this.checkQueue(walls,y,x+2)) walls.push([y,x+2]);
+                            if( y+2 < GLOBAL_YMAX && squares[y+1][x] != null && !(x == this.state.xStart && y+2 == this.state.yStart) && !(x == GLOBAL_XGOAL && y+2 == GLOBAL_YGOAL) && squares[y+2][x] != null && !this.checkQueue(walls,y+2,x)) walls.push([y+2,x]);
+                            if( x-2 > 0 && squares[y][x-1] != null && !(x-2 == this.state.xStart && y == this.state.yStart) && !(x-2 == GLOBAL_XGOAL && y == GLOBAL_YGOAL) && squares[y][x-2] != null && !this.checkQueue(walls,y,x-2)) walls.push([y,x-2]);
+                            if( y-2 > 0 && squares[y-1][x] != null && !(x == this.state.xStart && y-2 == this.state.yStart) && !(x == GLOBAL_XGOAL && y-2 == GLOBAL_YGOAL) && squares[y-2][x] != null && !this.checkQueue(walls,y-2,x)) walls.push([y-2,x]);
+                        }
+                        walls.splice(wall, 1);
+                    } else {
+                        clearInterval(carveMaze);
+                    }
+                }, 10)
+            }
+        });
     }
     checkQueue(queue, y, x) {
         for(var i = 0; i < queue.length; i++) {
@@ -519,6 +589,7 @@ class Board extends React.Component {
                 <button className="navbar-toggler reset"onClick={() => this.A_star(this.state.xStart,this.state.yStart)}> A*</button>
                 <button className="navbar-toggler reset"onClick={() => this.resetState()}> Reset Board</button>
                 <button className="navbar-toggler reset"onClick={() => this.StartMaze(parseInt(GLOBAL_XMAX/2), parseInt(GLOBAL_YMAX/2), GLOBAL_XMAX, GLOBAL_YMAX, 0, 0)}> Generate Maze</button>
+                <button className="navbar-toggler reset"onClick={() => this.Prims()}> Prim's Maze</button>
             </div>
         </nav>
              
