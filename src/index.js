@@ -333,65 +333,63 @@ class Board extends React.Component {
                         dist_origin++;
                         if(open_list.length > 0 && !(y === GLOBAL_YGOAL && x === GLOBAL_XGOAL)) {
                             open_list.shift();
-                            if(squares[y][x] !== 'X') { 
-                                if(x < GLOBAL_XMAX-1 && squares[y][x+1] !== 'X' && squares[y][x+1] !== 'wall' && squares[y][x+1] !== 'weight real_weight' && !this.checkQueue(open_list,y,x+1)) {
-                                    dist_end = Math.abs( GLOBAL_YGOAL-y) + Math.abs(GLOBAL_XGOAL-(x+1));
-                                    dist = dist_origin + dist_end;
-                                    open_list.push([y,x+1,dist,dist_origin]);
-                                    paths.set(y+','+(x+1),[dist, y+','+x]);
-                                }
-                                if(x > 0 && squares[y][x-1] !== 'X' && squares[y][x-1] !== 'wall' && squares[y][x-1] !== 'weight real_weight' && !this.checkQueue(open_list,y,x-1)){
-                                    dist_end = Math.abs( GLOBAL_YGOAL-y) + Math.abs( GLOBAL_XGOAL-(x-1));
-                                    dist = dist_origin + dist_end;
-                                    open_list.push([y,x-1,dist,dist_origin]);
-                                    paths.set(y+','+(x-1),[dist, y+','+x]);
-                                }
-                                if(y < GLOBAL_YMAX-1 && squares[y+1][x] !== 'X' && squares[y+1][x] !== 'wall' && squares[y+1][x] !== 'weight real_weight' && !this.checkQueue(open_list,y+1,x)){
-                                    dist_end = Math.abs( GLOBAL_YGOAL-(y+1)) + Math.abs( GLOBAL_XGOAL-x);
-                                    dist = dist_origin + dist_end;
-                                    open_list.push([y+1,x,dist,dist_origin]);
-                                    paths.set((y+1)+','+x,[dist, y+','+x]);
-                                }
-                                if(y > 0 && squares[y-1][x] !== 'X' && squares[y-1][x] !== 'wall' && squares[y-1][x] !== 'weight real_weight' && !this.checkQueue(open_list,y-1,x)){
-                                    dist_end = Math.abs( GLOBAL_YGOAL-(y-1)) + Math.abs( GLOBAL_XGOAL-x);
-                                    dist = dist_origin + dist_end;
-                                    open_list.push([y-1,x,dist,dist_origin]);
-                                    paths.set((y-1)+','+x,[dist, y+','+x]);
-                                }
-
-                                if(x < GLOBAL_XMAX-1 && squares[y][x+1]  === 'weight real_weight') {
-                                    dist_end = Math.abs( GLOBAL_YGOAL-y) + Math.abs(GLOBAL_XGOAL-(x+1));
-                                    dist = dist_origin + dist_end + 2; //weight of 2
-                                    open_list.push([y,x+1,dist,dist_origin]);
-                                    paths.set(y+','+(x+1),[dist, y+','+x]);
-                                }
-                                if(x > 0 && squares[y][x-1] !== 'X'  === 'weight real_weight'){
-                                    dist_end = Math.abs( GLOBAL_YGOAL-y) + Math.abs( GLOBAL_XGOAL-(x-1));
-                                    dist = dist_origin + dist_end + 2;
-                                    open_list.push([y,x-1,dist,dist_origin]);
-                                    paths.set(y+','+(x-1),[dist, y+','+x]);
-                                }
-                                if(y < GLOBAL_YMAX-1 && squares[y+1][x]  === 'weight real_weight'){
-                                    dist_end = Math.abs( GLOBAL_YGOAL-(y+1)) + Math.abs( GLOBAL_XGOAL-x);
-                                    dist = dist_origin + dist_end + 2;
-                                    open_list.push([y+1,x,dist,dist_origin]);
-                                    paths.set((y+1)+','+x,[dist, y+','+x]);
-                                }
-                                if(y > 0 && squares[y-1][x] !== 'X'  === 'weight real_weight'){
-                                    dist_end = Math.abs( GLOBAL_YGOAL-(y-1)) + Math.abs( GLOBAL_XGOAL-x);
-                                    dist = dist_origin + dist_end + 2;
-                                    open_list.push([y-1,x,dist,dist_origin]);
-                                    paths.set((y-1)+','+x,[dist, y+','+x]);
-                                }
-                                
-                                open_list.sort(function(a,b){
-                                    return a[2]-b[2];
-                                });
-                                squares[y][x] = 'X';
-                                squares[i][j] = 'start';
-                                document.getElementById(y+","+x).className = squares[y][x] + " square";
-                                timer = open_list.length;
+                            if(x < GLOBAL_XMAX-1 && squares[y][x+1] !== 'X' && squares[y][x+1] !== 'wall' && squares[y][x+1] !== 'weight real_weight' && !this.checkQueue(open_list,y,x+1)) {
+                                dist_end = Math.abs( GLOBAL_YGOAL-y) + Math.abs(GLOBAL_XGOAL-(x+1));
+                                dist = dist_origin + dist_end;
+                                open_list.push([y,x+1,dist,dist_origin]);
+                                paths.set(y+','+(x+1),[dist, y+','+x]);
                             }
+                            if(x > 0 && squares[y][x-1] !== 'X' && squares[y][x-1] !== 'wall' && squares[y][x-1] !== 'weight real_weight' && !this.checkQueue(open_list,y,x-1)){
+                                dist_end = Math.abs( GLOBAL_YGOAL-y) + Math.abs( GLOBAL_XGOAL-(x-1));
+                                dist = dist_origin + dist_end;
+                                open_list.push([y,x-1,dist,dist_origin]);
+                                paths.set(y+','+(x-1),[dist, y+','+x]);
+                            }
+                            if(y < GLOBAL_YMAX-1 && squares[y+1][x] !== 'X' && squares[y+1][x] !== 'wall' && squares[y+1][x] !== 'weight real_weight' && !this.checkQueue(open_list,y+1,x)){
+                                dist_end = Math.abs( GLOBAL_YGOAL-(y+1)) + Math.abs( GLOBAL_XGOAL-x);
+                                dist = dist_origin + dist_end;
+                                open_list.push([y+1,x,dist,dist_origin]);
+                                paths.set((y+1)+','+x,[dist, y+','+x]);
+                            }
+                            if(y > 0 && squares[y-1][x] !== 'X' && squares[y-1][x] !== 'wall' && squares[y-1][x] !== 'weight real_weight' && !this.checkQueue(open_list,y-1,x)){
+                                dist_end = Math.abs( GLOBAL_YGOAL-(y-1)) + Math.abs( GLOBAL_XGOAL-x);
+                                dist = dist_origin + dist_end;
+                                open_list.push([y-1,x,dist,dist_origin]);
+                                paths.set((y-1)+','+x,[dist, y+','+x]);
+                            }
+
+                            if(x < GLOBAL_XMAX-1 && squares[y][x+1]  === 'weight real_weight') {
+                                dist_end = Math.abs( GLOBAL_YGOAL-y) + Math.abs(GLOBAL_XGOAL-(x+1));
+                                dist = dist_origin + dist_end + 2; //weight of 2
+                                open_list.push([y,x+1,dist,dist_origin]);
+                                paths.set(y+','+(x+1),[dist, y+','+x]);
+                            }
+                            if(x > 0 && squares[y][x-1] !== 'X'  === 'weight real_weight'){
+                                dist_end = Math.abs( GLOBAL_YGOAL-y) + Math.abs( GLOBAL_XGOAL-(x-1));
+                                dist = dist_origin + dist_end + 2;
+                                open_list.push([y,x-1,dist,dist_origin]);
+                                paths.set(y+','+(x-1),[dist, y+','+x]);
+                            }
+                            if(y < GLOBAL_YMAX-1 && squares[y+1][x]  === 'weight real_weight'){
+                                dist_end = Math.abs( GLOBAL_YGOAL-(y+1)) + Math.abs( GLOBAL_XGOAL-x);
+                                dist = dist_origin + dist_end + 2;
+                                open_list.push([y+1,x,dist,dist_origin]);
+                                paths.set((y+1)+','+x,[dist, y+','+x]);
+                            }
+                            if(y > 0 && squares[y-1][x] !== 'X'  === 'weight real_weight'){
+                                dist_end = Math.abs( GLOBAL_YGOAL-(y-1)) + Math.abs( GLOBAL_XGOAL-x);
+                                dist = dist_origin + dist_end + 2;
+                                open_list.push([y-1,x,dist,dist_origin]);
+                                paths.set((y-1)+','+x,[dist, y+','+x]);
+                            }
+                            
+                            open_list.sort(function(a,b){
+                                return a[2]-b[2];
+                            });
+                            squares[y][x] = 'X';
+                            squares[i][j] = 'start';
+                            document.getElementById(y+","+x).className = squares[y][x] + " square";
+                            timer = open_list.length;
                         } else {
                             timer = 1;
                             let next = paths.get(GLOBAL_YGOAL+','+GLOBAL_XGOAL)[1].split(',');
