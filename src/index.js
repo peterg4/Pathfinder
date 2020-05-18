@@ -218,52 +218,54 @@ class Board extends React.Component {
                     y = queue[0][0];
                     x = queue[0][1];
                     if(queue.length !== 0 && !(y ===  GLOBAL_YGOAL && x ===  GLOBAL_XGOAL)) {
-                     //   if(squares[y][x] !== 'X') { 
-                            let dist = 1;
-                            var isSet=0;
-                        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                            if(x < GLOBAL_XMAX-1 && squares[y][x+1] !== 'X' && squares[y][x+1] !== 'wall' && squares[y][x+1] !== 'weight real_weight' && !this.checkQueue(queue,y,x+1)) {
-                                queue.push([y,x+1]);
-                                paths.set(y+','+(x+1),[dist, y+','+x]);
-                            }
-                            if(x > 0 && squares[y][x-1] !== 'X' && squares[y][x-1] !== 'wall' && squares[y][x-1] !== 'weight real_weight' && !this.checkQueue(queue,y,x-1)){
-                                queue.push([y,x-1]);
-                                paths.set(y+','+(x-1),[dist, y+','+x]);
-                            }
-
-                            if(y < GLOBAL_YMAX-1 && squares[y+1][x] !== 'X' && squares[y+1][x] !== 'wall' && squares[y+1][x] !== 'weight real_weight' && !this.checkQueue(queue,y+1,x)){
-                                queue.push([y+1,x]);
-                                paths.set((y+1)+','+x,[dist, y+','+x]);
-                            }
-
-                            if(y > 0 && squares[y-1][x] !== 'X' && squares[y-1][x] !== 'wall' && squares[y-1][x] !== 'weight real_weight' && !this.checkQueue(queue,y-1,x)){
-                                queue.push([y-1,x]);
-                                paths.set((y-1)+','+x,[dist, y+','+x]);
-                            }
-                        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                            if( x < GLOBAL_XMAX-1 && squares[y][x+1] === 'weight real_weight') {
-                                squares[y][x+1] = null;
-                                document.getElementById(y+","+x).className = squares[y][x+1] + " square";
-                                queue.push([y,x]);
-                            }
-                            if(x > 0 && squares[y][x-1] === 'weight real_weight'){
-                                squares[y][x-1] = 'weight';
-                                queue.push([y,x]);
-                            }
-                            if(y < GLOBAL_YMAX-1 && squares[y+1][x] === 'weight real_weight'){
-                                squares[y+1][x] = 'weight';
-                                queue.push([y,x]);
-                                document.getElementById(y+","+x).className = squares[y+1][x] + " square";
-                            }
-                            if(y > 0 && squares[y-1][x] === 'weight real_weight'){
-                                squares[y-1][x] = 'weight';
-                                queue.push([y,x]);
-                                document.getElementById(y+","+x).className = squares[y-1][x] + " square";
-                            }
-                            squares[y][x] = 'X';
-                            squares[i][j] = 'start';
-                            document.getElementById(y+","+x).className = squares[y][x] + " square";
-                   //     }
+                        let dist = 1;
+                        var isSet=0;
+                        //right
+                        if(x < GLOBAL_XMAX-1 && squares[y][x+1] !== 'X' && squares[y][x+1] !== 'wall' && squares[y][x+1] !== 'weight real_weight' && !this.checkQueue(queue,y,x+1)) {
+                            queue.push([y,x+1]);
+                            paths.set(y+','+(x+1),[dist, y+','+x]);
+                        }
+                        //left
+                        if(x > 0 && squares[y][x-1] !== 'X' && squares[y][x-1] !== 'wall' && squares[y][x-1] !== 'weight real_weight' && !this.checkQueue(queue,y,x-1)){
+                            queue.push([y,x-1]);
+                            paths.set(y+','+(x-1),[dist, y+','+x]);
+                        }
+                        //up
+                        if(y < GLOBAL_YMAX-1 && squares[y+1][x] !== 'X' && squares[y+1][x] !== 'wall' && squares[y+1][x] !== 'weight real_weight' && !this.checkQueue(queue,y+1,x)){
+                            queue.push([y+1,x]);
+                            paths.set((y+1)+','+x,[dist, y+','+x]);
+                        }
+                        //down
+                        if(y > 0 && squares[y-1][x] !== 'X' && squares[y-1][x] !== 'wall' && squares[y-1][x] !== 'weight real_weight' && !this.checkQueue(queue,y-1,x)){
+                            queue.push([y-1,x]);
+                            paths.set((y-1)+','+x,[dist, y+','+x]);
+                        }
+                        //weight right
+                        if( x < GLOBAL_XMAX-1 && squares[y][x+1] === 'weight real_weight') {
+                            squares[y][x+1] = null;
+                            document.getElementById(y+","+x).className = squares[y][x+1] + " square";
+                            queue.push([y,x]);
+                        }
+                        //weight left
+                        if(x > 0 && squares[y][x-1] === 'weight real_weight'){
+                            squares[y][x-1] = 'weight';
+                            queue.push([y,x]);
+                        }
+                        //weight up
+                        if(y < GLOBAL_YMAX-1 && squares[y+1][x] === 'weight real_weight'){
+                            squares[y+1][x] = 'weight';
+                            queue.push([y,x]);
+                            document.getElementById(y+","+x).className = squares[y+1][x] + " square";
+                        }
+                        //weight down
+                        if(y > 0 && squares[y-1][x] === 'weight real_weight'){
+                            squares[y-1][x] = 'weight';
+                            queue.push([y,x]);
+                            document.getElementById(y+","+x).className = squares[y-1][x] + " square";
+                        }
+                        squares[y][x] = 'X';
+                        squares[i][j] = 'start';
+                        document.getElementById(y+","+x).className = squares[y][x] + " square";
                         timer = queue.length;
                         queue.shift();
                     } else {
@@ -315,7 +317,7 @@ class Board extends React.Component {
         let y = j;
         var timer = 1;
             var search = setInterval(() => {
-                for(var ii = 0; ii < timer; ii++) {
+                for(var ii = 0; ii < timer/4; ii++) {
                     var squares = [];
                     for (var o = 0; o < this.state.squares.length; o++)
                         squares = this.state.squares.slice();
@@ -332,25 +334,25 @@ class Board extends React.Component {
                         if(open_list.length > 0 && !(y === GLOBAL_YGOAL && x === GLOBAL_XGOAL)) {
                             open_list.shift();
                             if(squares[y][x] !== 'X') { 
-                                if(x < GLOBAL_XMAX-1 && squares[y][x+1] !== 'X' && squares[y][x+1] !== 'wall' && squares[y][x+1] !== 'weight real_weight') {
+                                if(x < GLOBAL_XMAX-1 && squares[y][x+1] !== 'X' && squares[y][x+1] !== 'wall' && squares[y][x+1] !== 'weight real_weight' && !this.checkQueue(open_list,y,x+1)) {
                                     dist_end = Math.abs( GLOBAL_YGOAL-y) + Math.abs(GLOBAL_XGOAL-(x+1));
                                     dist = dist_origin + dist_end;
                                     open_list.push([y,x+1,dist,dist_origin]);
                                     paths.set(y+','+(x+1),[dist, y+','+x]);
                                 }
-                                if(x > 0 && squares[y][x-1] !== 'X' && squares[y][x-1] !== 'wall' && squares[y][x-1] !== 'weight real_weight'){
+                                if(x > 0 && squares[y][x-1] !== 'X' && squares[y][x-1] !== 'wall' && squares[y][x-1] !== 'weight real_weight' && !this.checkQueue(open_list,y,x-1)){
                                     dist_end = Math.abs( GLOBAL_YGOAL-y) + Math.abs( GLOBAL_XGOAL-(x-1));
                                     dist = dist_origin + dist_end;
                                     open_list.push([y,x-1,dist,dist_origin]);
                                     paths.set(y+','+(x-1),[dist, y+','+x]);
                                 }
-                                if(y < GLOBAL_YMAX-1 && squares[y+1][x] !== 'X' && squares[y+1][x] !== 'wall' && squares[y+1][x] !== 'weight real_weight'){
+                                if(y < GLOBAL_YMAX-1 && squares[y+1][x] !== 'X' && squares[y+1][x] !== 'wall' && squares[y+1][x] !== 'weight real_weight' && !this.checkQueue(open_list,y+1,x)){
                                     dist_end = Math.abs( GLOBAL_YGOAL-(y+1)) + Math.abs( GLOBAL_XGOAL-x);
                                     dist = dist_origin + dist_end;
                                     open_list.push([y+1,x,dist,dist_origin]);
                                     paths.set((y+1)+','+x,[dist, y+','+x]);
                                 }
-                                if(y > 0 && squares[y-1][x] !== 'X' && squares[y-1][x] !== 'wall' && squares[y-1][x] !== 'weight real_weight'){
+                                if(y > 0 && squares[y-1][x] !== 'X' && squares[y-1][x] !== 'wall' && squares[y-1][x] !== 'weight real_weight' && !this.checkQueue(open_list,y-1,x)){
                                     dist_end = Math.abs( GLOBAL_YGOAL-(y-1)) + Math.abs( GLOBAL_XGOAL-x);
                                     dist = dist_origin + dist_end;
                                     open_list.push([y-1,x,dist,dist_origin]);
@@ -419,7 +421,7 @@ class Board extends React.Component {
                         this.isRunning = false;
                     }
                 }
-            }, 1);
+            }, 40);
     }
     toggleWall(){
         this.isWalls = true;
