@@ -2,8 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css';
-const GLOBAL_XMAX = parseInt((window.innerWidth-100)/25);
-const GLOBAL_YMAX = parseInt((window.innerHeight-100)/25);
+let GLOBAL_XMAX = parseInt((window.innerWidth-100)/25);
+GLOBAL_XMAX % 2 == 0 ? GLOBAL_XMAX++: GLOBAL_XMAX+=0;
+let GLOBAL_YMAX = parseInt((window.innerHeight-100)/25);
+GLOBAL_YMAX % 2 == 0 ? GLOBAL_YMAX++: GLOBAL_YMAX+=0;
 const GLOBAL_XGOAL = parseInt(GLOBAL_XMAX*.70);
 const GLOBAL_YGOAL = parseInt(GLOBAL_YMAX*(3/4));
 function randomIntFromInterval(min, max) { // min and max included 
