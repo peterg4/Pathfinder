@@ -189,6 +189,13 @@ class Board extends React.Component {
             }
         }, 10)
     }
+    checkQueue(queue, y, x) {
+        for(var i = 0; i < queue.length; i++) {
+            if(queue[i][0] == y && queue[i][1] == x)
+                return true;
+        }
+        return false;
+    }
     BFS(i,j) {
         if(this.isRunning)
             return;
@@ -211,35 +218,31 @@ class Board extends React.Component {
                     y = queue[0][0];
                     x = queue[0][1];
                     if(queue.length !== 0 && !(y ===  GLOBAL_YGOAL && x ===  GLOBAL_XGOAL)) {
-                        if(squares[y][x] !== 'X') { 
+                     //   if(squares[y][x] !== 'X') { 
                             let dist = 1;
                             var isSet=0;
-                            if(squares[y][x] == 'X'){
-                                queue.shift();
-                                return;
-                            }
                         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                            if(x < GLOBAL_XMAX-1 && squares[y][x+1] !== 'X' && squares[y][x+1] !== 'wall' && squares[y][x+1] !== 'weight real_weight') {
+                            if(x < GLOBAL_XMAX-1 && squares[y][x+1] !== 'X' && squares[y][x+1] !== 'wall' && squares[y][x+1] !== 'weight real_weight' && !this.checkQueue(queue,y,x+1)) {
                                 queue.push([y,x+1]);
                                 paths.set(y+','+(x+1),[dist, y+','+x]);
                             }
-                            if(x > 0 && squares[y][x-1] !== 'X' && squares[y][x-1] !== 'wall' && squares[y][x-1] !== 'weight real_weight'){
+                            if(x > 0 && squares[y][x-1] !== 'X' && squares[y][x-1] !== 'wall' && squares[y][x-1] !== 'weight real_weight' && !this.checkQueue(queue,y,x-1)){
                                 queue.push([y,x-1]);
                                 paths.set(y+','+(x-1),[dist, y+','+x]);
                             }
 
-                            if(y < GLOBAL_YMAX-1 && squares[y+1][x] !== 'X' && squares[y+1][x] !== 'wall' && squares[y+1][x] !== 'weight real_weight'){
+                            if(y < GLOBAL_YMAX-1 && squares[y+1][x] !== 'X' && squares[y+1][x] !== 'wall' && squares[y+1][x] !== 'weight real_weight' && !this.checkQueue(queue,y+1,x)){
                                 queue.push([y+1,x]);
                                 paths.set((y+1)+','+x,[dist, y+','+x]);
                             }
 
-                            if(y > 0 && squares[y-1][x] !== 'X' && squares[y-1][x] !== 'wall' && squares[y-1][x] !== 'weight real_weight'){
+                            if(y > 0 && squares[y-1][x] !== 'X' && squares[y-1][x] !== 'wall' && squares[y-1][x] !== 'weight real_weight' && !this.checkQueue(queue,y-1,x)){
                                 queue.push([y-1,x]);
                                 paths.set((y-1)+','+x,[dist, y+','+x]);
                             }
                         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                             if( x < GLOBAL_XMAX-1 && squares[y][x+1] === 'weight real_weight') {
-                                squares[y][x+1] = 'weight';
+                                squares[y][x+1] = null;
                                 document.getElementById(y+","+x).className = squares[y][x+1] + " square";
                                 queue.push([y,x]);
                             }
@@ -260,7 +263,7 @@ class Board extends React.Component {
                             squares[y][x] = 'X';
                             squares[i][j] = 'start';
                             document.getElementById(y+","+x).className = squares[y][x] + " square";
-                        }
+                   //     }
                         timer = queue.length;
                         queue.shift();
                     } else {
@@ -356,7 +359,7 @@ class Board extends React.Component {
 
                                 if(x < GLOBAL_XMAX-1 && squares[y][x+1]  === 'weight real_weight') {
                                     dist_end = Math.abs( GLOBAL_YGOAL-y) + Math.abs(GLOBAL_XGOAL-(x+1));
-                                    dist = dist_origin + dist_end + 2;
+                                    dist = dist_origin + dist_end + 2; //weight of 2
                                     open_list.push([y,x+1,dist,dist_origin]);
                                     paths.set(y+','+(x+1),[dist, y+','+x]);
                                 }
