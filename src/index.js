@@ -410,7 +410,7 @@ class Board extends React.Component {
                                     clearInterval(find_path);
                                 }
                             clearInterval(search);
-                            }, 200);
+                            }, 15);
                             this.isRunning = false;
                         }
                     } catch {
