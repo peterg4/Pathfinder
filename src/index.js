@@ -276,7 +276,7 @@ class Board extends React.Component {
                     }
                 }, 10)
             }
-        });
+        },25);
     }
     checkQueue(queue, y, x) {
         for(var i = 0; i < queue.length; i++) {
