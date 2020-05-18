@@ -183,6 +183,19 @@ class Board extends React.Component {
             }
         }, 10)
     }
+    checkPrims(squares, x, y, choice, walls) {
+        switch(choice) {
+            case 1:
+                return  x+2 < GLOBAL_XMAX && squares[y][x+1] != null && squares[y][x+2] != null && !this.checkQueue(walls,y,x+2);
+            case 2:
+                return y+2 < GLOBAL_YMAX && squares[y+1][x] != null && squares[y+2][x] != null && !this.checkQueue(walls,y+2,x);
+            case 3:
+                return x-2 > 0 && squares[y][x-1] != null && squares[y][x-2] != null && !this.checkQueue(walls,y,x-2);
+            case 4:
+                return y-2 > 0 && squares[y-1][x] != null && squares[y-2][x] != null && !this.checkQueue(walls,y-2,x);
+        }
+        
+    }
     async Prims() {
         await this.resetState();
         var squares =[];
@@ -219,38 +232,42 @@ class Board extends React.Component {
                             document.getElementById(y+','+x).className = 'square';
                             squares[y-1][x] = null;
                             document.getElementById(y-1+','+x).className = 'square';
-                            if( x+2 < GLOBAL_XMAX && squares[y][x+1] != null && !(x+2 == this.state.xStart && y == this.state.yStart) && !(x+2 == GLOBAL_XGOAL && y == GLOBAL_YGOAL) && squares[y][x+2] != null && !this.checkQueue(walls,y,x+2)) walls.push([y,x+2]);
-                            if( y+2 < GLOBAL_YMAX && squares[y+1][x] != null && !(x == this.state.xStart && y+2 == this.state.yStart) && !(x == GLOBAL_XGOAL && y+2 == GLOBAL_YGOAL) && squares[y+2][x] != null && !this.checkQueue(walls,y+2,x)) walls.push([y+2,x]);
-                            if( x-2 > 0 && squares[y][x-1] != null && !(x-2 == this.state.xStart && y == this.state.yStart) && !(x-2 == GLOBAL_XGOAL && y == GLOBAL_YGOAL) && squares[y][x-2] != null && !this.checkQueue(walls,y,x-2)) walls.push([y,x-2]);
-                            if( y-2 > 0 && squares[y-1][x] != null && !(x == this.state.xStart && y-2 == this.state.yStart) && !(x == GLOBAL_XGOAL && y-2 == GLOBAL_YGOAL) && squares[y-2][x] != null && !this.checkQueue(walls,y-2,x)) walls.push([y-2,x]);
+                            if(this.checkPrims(squares,x,y,1,walls)) walls.push([y,x+2]);
+                            if(this.checkPrims(squares,x,y,2,walls)) walls.push([y+2,x]);
+                            if(this.checkPrims(squares,x,y,3,walls)) walls.push([y,x-2]);
+                            if(this.checkPrims(squares,x,y,4,walls)) walls.push([y-2,x]);
                         } else if(x-2 > 0 && squares[y][x-2] == null && squares[y][x-1] != null) {
                             squares[y][x] = null;
                             document.getElementById(y+','+(x-1)).className = 'square';
                             squares[y][x-1] = null;
                             document.getElementById(y+','+x).className = 'square';
-                            if( x+2 < GLOBAL_XMAX && squares[y][x+1] != null && !(x+2 == this.state.xStart && y == this.state.yStart) && !(x+2 == GLOBAL_XGOAL && y == GLOBAL_YGOAL) && squares[y][x+2] != null && !this.checkQueue(walls,y,x+2)) walls.push([y,x+2]);
-                            if( y+2 < GLOBAL_YMAX && squares[y+1][x] != null && !(x == this.state.xStart && y+2 == this.state.yStart) && !(x == GLOBAL_XGOAL && y+2 == GLOBAL_YGOAL) && squares[y+2][x] != null && !this.checkQueue(walls,y+2,x)) walls.push([y+2,x]);
-                            if( x-2 > 0 && squares[y][x-1] != null && !(x-2 == this.state.xStart && y == this.state.yStart) && !(x-2 == GLOBAL_XGOAL && y == GLOBAL_YGOAL) && squares[y][x-2] != null && !this.checkQueue(walls,y,x-2)) walls.push([y,x-2]);
-                            if( y-2 > 0 && squares[y-1][x] != null && !(x == this.state.xStart && y-2 == this.state.yStart) && !(x == GLOBAL_XGOAL && y-2 == GLOBAL_YGOAL) && squares[y-2][x] != null && !this.checkQueue(walls,y-2,x)) walls.push([y-2,x]);
+                            if(this.checkPrims(squares,x,y,1,walls)) walls.push([y,x+2]);
+                            if(this.checkPrims(squares,x,y,2,walls)) walls.push([y+2,x]);
+                            if(this.checkPrims(squares,x,y,3,walls)) walls.push([y,x-2]);
+                            if(this.checkPrims(squares,x,y,4,walls)) walls.push([y-2,x]);
                         } else if(x+2 < GLOBAL_XMAX && squares[y][x+2] == null && squares[y][x+1] != null) {
                             squares[y][x] = null;
                             document.getElementById(y+','+(x+1)).className = 'square';
                             squares[y][x+1] = null;
                             document.getElementById(y+','+x).className = 'square';
-                            if( x+2 < GLOBAL_XMAX && squares[y][x+1] != null && !(x+2 == this.state.xStart && y == this.state.yStart) && !(x+2 == GLOBAL_XGOAL && y == GLOBAL_YGOAL) && squares[y][x+2] != null && !this.checkQueue(walls,y,x+2)) walls.push([y,x+2]);
-                            if( y+2 < GLOBAL_YMAX && squares[y+1][x] != null && !(x == this.state.xStart && y+2 == this.state.yStart) && !(x == GLOBAL_XGOAL && y+2 == GLOBAL_YGOAL) && squares[y+2][x] != null && !this.checkQueue(walls,y+2,x)) walls.push([y+2,x]);
-                            if( x-2 > 0 && squares[y][x-1] != null && !(x-2 == this.state.xStart && y == this.state.yStart) && !(x-2 == GLOBAL_XGOAL && y == GLOBAL_YGOAL) && squares[y][x-2] != null && !this.checkQueue(walls,y,x-2)) walls.push([y,x-2]);
-                            if( y-2 > 0 && squares[y-1][x] != null && !(x == this.state.xStart && y-2 == this.state.yStart) && !(x == GLOBAL_XGOAL && y-2 == GLOBAL_YGOAL) && squares[y-2][x] != null && !this.checkQueue(walls,y-2,x)) walls.push([y-2,x]);
+                            if(this.checkPrims(squares,x,y,1,walls)) walls.push([y,x+2]);
+                            if(this.checkPrims(squares,x,y,2,walls)) walls.push([y+2,x]);
+                            if(this.checkPrims(squares,x,y,3,walls)) walls.push([y,x-2]);
+                            if(this.checkPrims(squares,x,y,4,walls)) walls.push([y-2,x]);
                         } else if(y+2 < GLOBAL_YMAX && squares[y+2][x] == null && squares[y+1][x] != null) {
                             squares[y][x] = null;
                             document.getElementById(y+','+(x-1)).className = 'square';
                             squares[y][x-1] = null;
                             document.getElementById(y+','+x).className = 'square';
-                            if( x+2 < GLOBAL_XMAX && squares[y][x+1] != null && !(x+2 == this.state.xStart && y == this.state.yStart) && !(x+2 == GLOBAL_XGOAL && y == GLOBAL_YGOAL) && squares[y][x+2] != null && !this.checkQueue(walls,y,x+2)) walls.push([y,x+2]);
-                            if( y+2 < GLOBAL_YMAX && squares[y+1][x] != null && !(x == this.state.xStart && y+2 == this.state.yStart) && !(x == GLOBAL_XGOAL && y+2 == GLOBAL_YGOAL) && squares[y+2][x] != null && !this.checkQueue(walls,y+2,x)) walls.push([y+2,x]);
-                            if( x-2 > 0 && squares[y][x-1] != null && !(x-2 == this.state.xStart && y == this.state.yStart) && !(x-2 == GLOBAL_XGOAL && y == GLOBAL_YGOAL) && squares[y][x-2] != null && !this.checkQueue(walls,y,x-2)) walls.push([y,x-2]);
-                            if( y-2 > 0 && squares[y-1][x] != null && !(x == this.state.xStart && y-2 == this.state.yStart) && !(x == GLOBAL_XGOAL && y-2 == GLOBAL_YGOAL) && squares[y-2][x] != null && !this.checkQueue(walls,y-2,x)) walls.push([y-2,x]);
+                            if(this.checkPrims(squares,x,y,1,walls)) walls.push([y,x+2]);
+                            if(this.checkPrims(squares,x,y,2,walls)) walls.push([y+2,x]);
+                            if(this.checkPrims(squares,x,y,3,walls)) walls.push([y,x-2]);
+                            if(this.checkPrims(squares,x,y,4,walls)) walls.push([y-2,x]);
                         }
+                        squares[this.state.yStart][this.state.xStart] = 'start'
+                        document.getElementById(this.state.yStart+','+this.state.xStart).className = 'start square';
+                        squares[GLOBAL_YGOAL][GLOBAL_XGOAL] = 'green';
+                        document.getElementById(GLOBAL_YGOAL+','+GLOBAL_XGOAL).className = 'green square';
                         walls.splice(wall, 1);
                     } else {
                         clearInterval(carveMaze);
