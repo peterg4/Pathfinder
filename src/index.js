@@ -172,22 +172,17 @@ class Board extends React.Component {
                 document.getElementById(y+','+midx).className = 'wall square';
                 y++;
             }else {
-                var mid_i = randomIntFromInterval(parseInt(xmin/2), parseInt((midx-1)/2));
-                var new_midx = possible_xmids[mid_i];
-                mid_i = randomIntFromInterval(parseInt(ymin/2), parseInt((midy-1)/2));
-                var new_midy = possible_ymids[mid_i];
+                var mid_xi = randomIntFromInterval(parseInt(xmin/2), parseInt((midx-1)/2));
+                var new_midx = possible_xmids[mid_xi];
+                var mid_yi = randomIntFromInterval(parseInt(ymin/2), parseInt((midy-1)/2));
+                var new_midy = possible_ymids[mid_yi];
                 await this.generateMaze(new_midx, new_midy, midx, midy, xmin, ymin, possible_xmids, possible_ymids);
 
-                mid_i = randomIntFromInterval(parseInt(xmin/2), parseInt((midx-1)/2));
-                new_midx = possible_xmids[mid_i];
-                mid_i = randomIntFromInterval(parseInt((midy+2)/2), parseInt((ymax-1)/2));
-                new_midy = possible_ymids[mid_i];
-                if(!new_midx || !new_midy) {
-                    console.log(mid_i);
-                    console.log(new_midx, new_midy);
-                    clearInterval(divide)
-                    return;
-                }
+                mid_xi = randomIntFromInterval(parseInt(xmin/2), parseInt((midx-1)/2));
+                new_midx = possible_xmids[mid_xi];
+                mid_yi = randomIntFromInterval(parseInt((midy+2)/2), parseInt((ymax-1)/2));
+                new_midy = possible_ymids[mid_yi];
+                console.log(mid_yi);
                 await this.generateMaze(new_midx, new_midy, midx, ymax, xmin, midy, possible_xmids, possible_ymids);
 
    /*             mid_i = randomIntFromInterval(parseInt((midx+1)/2), parseInt(xmax/2));
@@ -242,12 +237,10 @@ class Board extends React.Component {
             }else {
                 clearInterval(initialize);
                 var walls = [];
-                var x = parseInt(GLOBAL_XMAX/2);
-                var y = parseInt(GLOBAL_YMAX/2);
+                var x = 1;
+                var y = 1;
                 walls.push([y,x+2]);
                 walls.push([y+2,x]);
-                walls.push([y,x-2]);
-                walls.push([y-2,x]);
                 squares[y][x] = null;
                 document.getElementById(y+','+x).className = 'square';
                 var carveMaze = setInterval(() => {
