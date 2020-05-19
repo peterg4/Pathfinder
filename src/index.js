@@ -173,13 +173,13 @@ class Board extends React.Component {
         var holey2  = possible_ymids[randomIntFromInterval(parseInt(midy/2), parseInt((ymax-2)/2))]-1;
         var divide = setInterval(async () => {
             if(x < xmax) {
-                if(!(x == this.state.xStart && y == this.state.xStart) && x != holex1 && x != holex2) {
+                if(!(x == this.state.xStart && y == this.state.xStart) && !(x == GLOBAL_XGOAL && y == GLOBAL_YGOAL) && x != holex1 && x != holex2) {
                     squares[midy][x] = 'wall';
                     document.getElementById(midy+','+x).className = 'wall square';
                 }
                 x++;
             } else if(y < ymax) {
-                if(!(x == this.state.xStart && y == this.state.xStart) && y != holey && y != holey2) {
+                if(!(x == this.state.xStart && y == this.state.xStart) && !(x == GLOBAL_XGOAL && y == GLOBAL_YGOAL) && y != holey && y != holey2) {
                     squares[y][midx] = 'wall';
                     document.getElementById(y+','+midx).className = 'wall square';
                 }
