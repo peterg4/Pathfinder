@@ -152,7 +152,7 @@ class Board extends React.Component {
     async generateMaze(midx, midy, xmax, ymax, xmin, ymin, possible_xmids, possible_ymids) {
         var run_y = true;
         var run_x = true;
-        if(xmax-xmin < 3 && ymax - ymin < 3) {
+        if(xmax-xmin < 3 || ymax - ymin < 3) {
             return;
         } else if(xmax-xmin < 3) {
             run_x = false;
@@ -162,16 +162,24 @@ class Board extends React.Component {
             squares = this.state.squares.slice();
         var x = xmin;
         var y = ymin;
+        var holex1 = randomIntFromInterval(xmin+1, midx-1);
+        var holex2 = randomIntFromInterval(midx+1, xmax-1);
+        var holey  = randomIntFromInterval(ymin+1, ymax-1);
+        console.log(holex1, holex2, holey);
         var divide = setInterval(async () => {
-            if(x < xmax && !(x == this.state.xStart && y == this.state.xStart)) {
-                squares[midy][x] = 'wall';
-                document.getElementById(midy+','+x).className = 'wall square';
+            if(x < xmax-1) {
+                if(!(x == this.state.xStart && y == this.state.xStart) && x !=  holex1 && x != holex2) {
+                    squares[midy][x] = 'wall';
+                    document.getElementById(midy+','+x).className = 'wall square';
+                }
                 x++;
-            } else if(y < ymax && !(x == this.state.xStart && y == this.state.xStart)) {
-                squares[y][midx] = 'wall';
-                document.getElementById(y+','+midx).className = 'wall square';
+            } else if(y < ymax) {
+                if(!(x == this.state.xStart && y == this.state.xStart) && y != holey) {
+                    squares[y][midx] = 'wall';
+                    document.getElementById(y+','+midx).className = 'wall square';
+                }
                 y++;
-            }else {
+            } else {
                 var mid_xi = randomIntFromInterval(parseInt(xmin/2), parseInt((midx-1)/2));
                 var new_midx = possible_xmids[mid_xi];
                 var mid_yi = randomIntFromInterval(parseInt(ymin/2), parseInt((midy-1)/2));
@@ -182,25 +190,19 @@ class Board extends React.Component {
                 new_midx = possible_xmids[mid_xi];
                 mid_yi = randomIntFromInterval(parseInt((midy+2)/2), parseInt((ymax-1)/2));
                 new_midy = possible_ymids[mid_yi];
-                console.log(mid_yi);
                 await this.generateMaze(new_midx, new_midy, midx, ymax, xmin, midy, possible_xmids, possible_ymids);
 
-   /*             mid_i = randomIntFromInterval(parseInt((midx+1)/2), parseInt(xmax/2));
-                new_midx = possible_xmids[mid_i];
-                mid_i = randomIntFromInterval(parseInt(ymin/2), parseInt((midy-1)/2));
-                new_midy = possible_ymids[mid_i];
-                await this.generateMaze(new_midx, new_midy, xmax, midy, midx, ymin, possible_xmids, possible_ymids);*/
+                mid_xi = randomIntFromInterval(parseInt((midx+1)/2), parseInt((xmax-1)/2));
+                new_midx = possible_xmids[mid_xi];
+                mid_yi = randomIntFromInterval(parseInt(ymin/2), parseInt((midy-1)/2));
+                new_midy = possible_ymids[mid_yi];
+                await this.generateMaze(new_midx, new_midy, xmax, midy, midx, ymin, possible_xmids, possible_ymids);
 
-       /*         mid_i = randomIntFromInterval(parseInt((midx+1)/2), parseInt(xmax/2));
-                new_midx = possible_xmids[mid_i];
-                mid_i = randomIntFromInterval(parseInt((midy+1)/2), parseInt(ymax/2));
-                new_midy = possible_ymids[mid_i];
-                if(!new_midx || !new_midy) {
-                    console.log(new_midx, new_midy);
-                    clearInterval(divide)
-                    return;
-                }
-                await this.generateMaze(new_midx, new_midy, xmax, ymax, midx, midy, possible_xmids, possible_ymids);*/
+                mid_xi = randomIntFromInterval(parseInt((midx+1)/2), parseInt((xmax-1)/2));
+                new_midx = possible_xmids[mid_xi];
+                mid_yi = randomIntFromInterval(parseInt((midy+1)/2), parseInt((ymax-1)/2));
+                new_midy = possible_ymids[mid_yi];
+                await this.generateMaze(new_midx, new_midy, xmax, ymax, midx, midy, possible_xmids, possible_ymids);
                 clearInterval(divide)
             }
         }, 10);
