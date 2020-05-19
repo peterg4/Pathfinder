@@ -150,12 +150,14 @@ class Board extends React.Component {
         }, 10)
     }
     async generateMaze(midx, midy, xmax, ymax, xmin, ymin, possible_xmids, possible_ymids) {
-        if(xmax-xmin < 3 || ymax - ymin < 3 || midy == ymin || midx == xmin)  {
-            return;
-        }
         var squares =[];
         for (var o = 0; o < this.state.squares.length; o++)
             squares = this.state.squares.slice();
+        if(xmax-xmin < 3 || ymax - ymin < 3 || midy == ymin || midx == xmin)  {
+            squares[GLOBAL_YGOAL][GLOBAL_XGOAL] = 'green';
+            document.getElementById(GLOBAL_YGOAL+','+GLOBAL_XGOAL).className = 'green square';
+            return;
+        }
         //upper left
         var new_midx = possible_xmids[parseInt((parseInt(xmin) + parseInt((midx-xmin)/2))/2)-1];
         var new_midy = possible_ymids[parseInt((parseInt(ymin) + parseInt((midy-ymin)/2))/2)-1];
