@@ -156,11 +156,21 @@ class Board extends React.Component {
         var squares =[];
         for (var o = 0; o < this.state.squares.length; o++)
             squares = this.state.squares.slice();
+        //upper left
+        var new_midx = possible_xmids[parseInt((parseInt(xmin) + parseInt((midx-xmin)/2))/2)-1];
+        var new_midy = possible_ymids[parseInt((parseInt(ymin) + parseInt((midy-ymin)/2))/2)-1];
+        await this.generateMaze(new_midx, new_midy, midx, midy, xmin, ymin, possible_xmids, possible_ymids);
+
+        //lower left
+        new_midx = possible_xmids[parseInt((parseInt(xmin) + parseInt((midx-xmin)/2))/2)-1];
+        new_midy = possible_ymids[parseInt((parseInt(midy) + parseInt((ymax-midy)/2))/2)-1];
+        await this.generateMaze(new_midx, new_midy, midx, ymax, xmin, midy, possible_xmids, possible_ymids);
         var x = xmin;
         var y = ymin;
-        var holex1 = possible_xmids[randomIntFromInterval(parseInt(xmin+2/2), parseInt((midx-2)/2))]-1;
-        var holex2 = possible_xmids[randomIntFromInterval(parseInt((midx+2)/2), parseInt((xmax-2)/2))]-1;
-        var holey  = possible_ymids[randomIntFromInterval(parseInt((ymin+2)/2), parseInt((ymax-2)/2))]-1;
+        var holex1 = possible_xmids[randomIntFromInterval(parseInt(xmin/2), parseInt((midx-2)/2))]-1;
+        var holex2 = possible_xmids[randomIntFromInterval(parseInt(midx/2), parseInt((xmax-2)/2))]-1;
+        var holey  = possible_ymids[randomIntFromInterval(parseInt(ymin/2), parseInt((midy-2)/2))]-1;
+        var holey2  = possible_ymids[randomIntFromInterval(parseInt(midy/2), parseInt((ymax-2)/2))]-1;
         var divide = setInterval(async () => {
             if(x < xmax) {
                 if(!(x == this.state.xStart && y == this.state.xStart) && x != holex1 && x != holex2) {
@@ -169,21 +179,12 @@ class Board extends React.Component {
                 }
                 x++;
             } else if(y < ymax) {
-                if(!(x == this.state.xStart && y == this.state.xStart) && y != holey) {
+                if(!(x == this.state.xStart && y == this.state.xStart) && y != holey && y != holey2) {
                     squares[y][midx] = 'wall';
                     document.getElementById(y+','+midx).className = 'wall square';
                 }
                 y++;
             } else {
-                //upper left
-                var new_midx = possible_xmids[parseInt((parseInt(xmin) + parseInt((midx-xmin)/2))/2)-1];
-                var new_midy = possible_ymids[parseInt((parseInt(ymin) + parseInt((midy-ymin)/2))/2)-1];
-                await this.generateMaze(new_midx, new_midy, midx, midy, xmin, ymin, possible_xmids, possible_ymids);
-
-               //lower left
-                new_midx = possible_xmids[parseInt((parseInt(xmin) + parseInt((midx-xmin)/2))/2)-1];
-                new_midy = possible_ymids[parseInt((parseInt(midy) + parseInt((ymax-midy)/2))/2)-1];
-                await this.generateMaze(new_midx, new_midy, midx, ymax, xmin, midy, possible_xmids, possible_ymids);
 
                 //upper right
                 new_midx = possible_xmids[parseInt((parseInt(midx) + parseInt((xmax-midx)/2))/2)-1];
