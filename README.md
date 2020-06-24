@@ -1,3 +1,5 @@
 # Pathfinder
-Visualizer for pathfinding algorithms including: Djikstra's Algortihm and A*. Includes recursive division maze generation as well as custom wall and weight additions that influence the optimum path.
+Visualizer for Djikstra's Algortihm and A* pathfinding algorithms. Includes recursive division, and Prim's maze generation as well as custom wall and weight additions that influence the optimum path.
+
+# Demo
 Hosted at https://peterg4.github.io/Pathfinder/build/index.html
