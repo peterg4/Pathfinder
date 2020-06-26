@@ -31,6 +31,8 @@ img {
   transition: border-radius .6s;
   padding: 8px 26px;
   margin-right: 25px;
+  margin-bottom: 10px;
+  margin-top: 10px;
   color: white!important;
   border-color: #61dbfb!important;
 }
