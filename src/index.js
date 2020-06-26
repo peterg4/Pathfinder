@@ -395,11 +395,11 @@ class Board extends React.Component {
                             }
                             
                             } else {
-                            clearInterval(find_path);
+                                this.isRunning = false;
+                                clearInterval(find_path);
                             }
                         clearInterval(search);
                         }, 15);
-                        this.isRunning = false;
                     }
                 } catch {
                     clearInterval(find_path);
@@ -516,11 +516,11 @@ class Board extends React.Component {
                                         x = next[1];
                                     }
                                 } else {
+                                    this.isRunning = false;
                                     clearInterval(find_path);
                                 }
                             clearInterval(search);
                             }, 15);
-                            this.isRunning = false;
                         }
                     } catch {
                         clearInterval(find_path);
