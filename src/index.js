@@ -114,6 +114,8 @@ class Board extends React.Component {
         this.setState({squares: squares},);
     }
     async StartMaze(midx, midy, xmax, ymax, xmin, ymin) {
+        if(this.isRunning) 
+            return;
         await this.resetState();
         var squares =[];
         for (var o = 0; o < this.state.squares.length; o++)
@@ -215,6 +217,8 @@ class Board extends React.Component {
         
     }
     async Prims() {
+        if(this.isRunning) 
+            return;
         await this.resetState();
         var squares =[];
         for (var o = 0; o < this.state.squares.length; o++)
