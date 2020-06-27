@@ -177,6 +177,7 @@ img {
 }
 .active {
   background-color: #61dbfb!important;
+  color: #111!important;
   border-radius: 0px;
 }
 .wall:focus {
