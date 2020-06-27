@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Button } from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css';
 let GLOBAL_XMAX = parseInt((window.innerWidth-100)/25);
@@ -628,13 +629,21 @@ class Board extends React.Component {
         <nav className="navbar navbar-dark dark">
             <a className="navbar-brand" href="#"><img src="path.png"></img> <div className="logo">Pathfinder</div></a>
             <div className="nav-center">
-                <Button id="w"  className="nav-button active "onClick={() => this.toggleWall()}> Add Walls</Button>
-                <Button id="we" className="nav-button" onClick={() => this.toggleWeight()}> Add Weights</Button>
-                <Button className="nav-button" onClick={() => this.BFS(this.state.xStart,this.state.yStart)}> Dijsktra's</Button>
-                <Button className="nav-button" onClick={() => this.A_star(this.state.xStart,this.state.yStart)}> A*</Button>
-                <Button className="nav-button" onClick={() => this.resetState()}> Reset Board</Button>
-                <Button className="nav-button" onClick={() => this.StartMaze(parseInt(GLOBAL_XMAX/2), parseInt(GLOBAL_YMAX/2), GLOBAL_XMAX, GLOBAL_YMAX, 0, 0)}> Recursive Maze</Button>
-                <Button className="nav-button" onClick={() => this.Prims()}> Prim's Maze</Button>
+                <div className="btn-grouping">
+                    <NavButton variant="contained" color="primary" id="w"  className="nav-button active "onClick={() => this.toggleWall()}> Add Walls</NavButton>
+                    <NavButton variant="contained" color="primary" id="we" className="nav-button" onClick={() => this.toggleWeight()}> Add Weights</NavButton>
+                </div>
+                <div className="btn-grouping">
+                    <NavButton variant="contained" color="primary" className="nav-button" onClick={() => this.BFS(this.state.xStart,this.state.yStart)}> Dijsktra's</NavButton>
+                    <NavButton variant="contained" color="primary" className="nav-button" onClick={() => this.A_star(this.state.xStart,this.state.yStart)}> A*</NavButton>
+                </div>
+                <div className="btn-grouping">
+                    <NavButton variant="contained" color="primary" className="nav-button" onClick={() => this.StartMaze(parseInt(GLOBAL_XMAX/2), parseInt(GLOBAL_YMAX/2), GLOBAL_XMAX, GLOBAL_YMAX, 0, 0)}> Recursive Maze</NavButton>
+                    <NavButton variant="contained" color="primary" className="nav-button" onClick={() => this.Prims()}> Prim's Maze</NavButton>
+                </div>
+                <div className="btn-grouping">
+                    <Button variant="contained" color="secondary" className="nav-button" onClick={() => this.resetState()}> Reset Board</Button>
+                </div>
             </div>
         </nav>
              
@@ -645,6 +654,13 @@ class Board extends React.Component {
         );
     }
 }
+
+const NavButton = withStyles({
+    root: {
+      background: 'rgb(96, 69, 251)',
+      color: 'white',
+    },
+})(Button);
 
 class Game extends React.Component {
 render() {
