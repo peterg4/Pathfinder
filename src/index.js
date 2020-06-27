@@ -628,13 +628,13 @@ class Board extends React.Component {
         <nav className="navbar navbar-dark dark">
             <a className="navbar-brand" href="#"><img src="path.png"></img> <div className="logo">Pathfinder</div></a>
             <div className="nav-center">
-                <Button color="primary" id="w" className="navbar-toggler reset active"onClick={() => this.toggleWall()}> Add Walls</Button>
-                <Button color="primary" id="we" className="navbar-toggler reset"onClick={() => this.toggleWeight()}> Add Weights</Button>
-                <Button color="primary" className="navbar-toggler reset"onClick={() => this.BFS(this.state.xStart,this.state.yStart)}> Dijsktra's</Button>
-                <Button color="primary" className="navbar-toggler reset"onClick={() => this.A_star(this.state.xStart,this.state.yStart)}> A*</Button>
-                <Button color="primary" className="navbar-toggler reset"onClick={() => this.resetState()}> Reset Board</Button>
-                <Button color="primary" className="navbar-toggler reset"onClick={() => this.StartMaze(parseInt(GLOBAL_XMAX/2), parseInt(GLOBAL_YMAX/2), GLOBAL_XMAX, GLOBAL_YMAX, 0, 0)}> Recursive Maze</Button>
-                <Button color="primary" className="navbar-toggler reset"onClick={() => this.Prims()}> Prim's Maze</Button>
+                <Button id="w"  className="nav-button active "onClick={() => this.toggleWall()}> Add Walls</Button>
+                <Button id="we" className="nav-button" onClick={() => this.toggleWeight()}> Add Weights</Button>
+                <Button className="nav-button" onClick={() => this.BFS(this.state.xStart,this.state.yStart)}> Dijsktra's</Button>
+                <Button className="nav-button" onClick={() => this.A_star(this.state.xStart,this.state.yStart)}> A*</Button>
+                <Button className="nav-button" onClick={() => this.resetState()}> Reset Board</Button>
+                <Button className="nav-button" onClick={() => this.StartMaze(parseInt(GLOBAL_XMAX/2), parseInt(GLOBAL_YMAX/2), GLOBAL_XMAX, GLOBAL_YMAX, 0, 0)}> Recursive Maze</Button>
+                <Button className="nav-button" onClick={() => this.Prims()}> Prim's Maze</Button>
             </div>
         </nav>
              
