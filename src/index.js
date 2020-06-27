@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { Button } from '@material-ui/core';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css';
 let GLOBAL_XMAX = parseInt((window.innerWidth-100)/25);
@@ -159,6 +160,7 @@ class Board extends React.Component {
         if(xmax-xmin < 3 || ymax - ymin < 3 || midy == ymin || midx == xmin)  {
             squares[GLOBAL_YGOAL][GLOBAL_XGOAL] = 'green';
             document.getElementById(GLOBAL_YGOAL+','+GLOBAL_XGOAL).className = 'green square';
+            this.isRunning = false;
             return;
         }
         //upper left
@@ -295,6 +297,7 @@ class Board extends React.Component {
                         document.getElementById(GLOBAL_YGOAL+','+GLOBAL_XGOAL).className = 'green square';
                         walls.splice(wall, 1);
                     } else {
+                        this.isRunning = false;
                         clearInterval(carveMaze);
                     }
                 }, 10)
@@ -535,13 +538,13 @@ class Board extends React.Component {
     }
     toggleWall(){
         this.isWalls = true;
-        document.getElementById("w").className = "navbar-toggler reset first active";
-        document.getElementById("we").className = "navbar-toggler reset";
+        document.getElementById("w").classList.add("active");
+        document.getElementById("we").classList.remove("active");
     }
     toggleWeight(){
         this.isWalls = false;
-        document.getElementById("w").className = "navbar-toggler reset first";
-        document.getElementById("we").className = "navbar-toggler reset active";
+        document.getElementById("w").classList.remove("active");
+        document.getElementById("we").classList.add("active");
     }
     addWall(i,j){
         if(this.isMouseDown){
@@ -625,13 +628,13 @@ class Board extends React.Component {
         <nav className="navbar navbar-dark dark">
             <a className="navbar-brand" href="#"><img src="path.png"></img> <div className="logo">Pathfinder</div></a>
             <div className="nav-center">
-                <button id="w" className="navbar-toggler reset active"onClick={() => this.toggleWall()}> Add Walls</button>
-                <button id="we" className="navbar-toggler reset"onClick={() => this.toggleWeight()}> Add Weights</button>
-                <button className="navbar-toggler reset"onClick={() => this.BFS(this.state.xStart,this.state.yStart)}> Dijsktra's</button>
-                <button className="navbar-toggler reset"onClick={() => this.A_star(this.state.xStart,this.state.yStart)}> A*</button>
-                <button className="navbar-toggler reset"onClick={() => this.resetState()}> Reset Board</button>
-                <button className="navbar-toggler reset"onClick={() => this.StartMaze(parseInt(GLOBAL_XMAX/2), parseInt(GLOBAL_YMAX/2), GLOBAL_XMAX, GLOBAL_YMAX, 0, 0)}> Recursive Maze</button>
-                <button className="navbar-toggler reset"onClick={() => this.Prims()}> Prim's Maze</button>
+                <Button color="primary" id="w" className="navbar-toggler reset active"onClick={() => this.toggleWall()}> Add Walls</Button>
+                <Button color="primary" id="we" className="navbar-toggler reset"onClick={() => this.toggleWeight()}> Add Weights</Button>
+                <Button color="primary" className="navbar-toggler reset"onClick={() => this.BFS(this.state.xStart,this.state.yStart)}> Dijsktra's</Button>
+                <Button color="primary" className="navbar-toggler reset"onClick={() => this.A_star(this.state.xStart,this.state.yStart)}> A*</Button>
+                <Button color="primary" className="navbar-toggler reset"onClick={() => this.resetState()}> Reset Board</Button>
+                <Button color="primary" className="navbar-toggler reset"onClick={() => this.StartMaze(parseInt(GLOBAL_XMAX/2), parseInt(GLOBAL_YMAX/2), GLOBAL_XMAX, GLOBAL_YMAX, 0, 0)}> Recursive Maze</Button>
+                <Button color="primary" className="navbar-toggler reset"onClick={() => this.Prims()}> Prim's Maze</Button>
             </div>
         </nav>
              
