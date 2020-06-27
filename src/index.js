@@ -117,6 +117,7 @@ class Board extends React.Component {
         if(this.isRunning) 
             return;
         await this.resetState();
+        this.isRunning = true;
         var squares =[];
         for (var o = 0; o < this.state.squares.length; o++)
             squares = this.state.squares.slice();
@@ -203,6 +204,7 @@ class Board extends React.Component {
             }
         }, 10);
     }
+    
     checkPrims(squares, x, y, choice, walls) {
         switch(choice) {
             case 1:
@@ -220,6 +222,7 @@ class Board extends React.Component {
         if(this.isRunning) 
             return;
         await this.resetState();
+        this.isRunning = true;
         var squares =[];
         for (var o = 0; o < this.state.squares.length; o++)
             squares = this.state.squares.slice();
