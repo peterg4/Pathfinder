@@ -557,8 +557,8 @@ class Board extends React.Component {
                 squares[i][j] = 'weight real_weight';
                 document.getElementById(i+","+j).className = 'weight real_weight square';
             } else if (squares[i][j] == 'wall'){
-                squares[i][j] = null;
-                document.getElementById(i+","+j).className = 'square';
+              //  squares[i][j] = null;
+               // document.getElementById(i+","+j).className = 'square';
             } else {
                 squares[i][j] = 'wall';
                 document.getElementById(i+","+j).className = 'wall square';
