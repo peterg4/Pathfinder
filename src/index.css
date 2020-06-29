@@ -286,7 +286,7 @@ img {
 }
 @keyframes weightAnimation {
    0% {
-     background-size: 30%;
+     background-size: 60%;
    }
 
    100% {

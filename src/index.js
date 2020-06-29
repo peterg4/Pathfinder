@@ -48,14 +48,14 @@ class Board extends React.Component {
         }
         var xStart = 5;
         var yStart = 5;
-        var isWalls = true;
         var isRunning = false;
         square_board[xStart][yStart] = 'start';
         this.state = {
             squares: square_board,
             xStart: xStart,
             yStart: yStart,
-            isWalls: isWalls,
+            drawOption: 0,
+            isEraser: false,
             isRunning: isRunning,
         };
     }
@@ -537,31 +537,40 @@ class Board extends React.Component {
                 }
             }, 40);
     }
-    toggleWall(){
-        this.isWalls = true;
+    toggleWall() {
+        this.drawOption = 1;
         document.getElementById("w").classList.add("active");
         document.getElementById("we").classList.remove("active");
+        document.getElementById("er").classList.remove("active");
     }
-    toggleWeight(){
-        this.isWalls = false;
+    toggleWeight() {
+        this.drawOption = 2;
         document.getElementById("w").classList.remove("active");
         document.getElementById("we").classList.add("active");
+        document.getElementById("er").classList.remove("active");
+    }
+    toggleErase() {
+        this.drawOption = 3;
+        document.getElementById("w").classList.remove("active");
+        document.getElementById("we").classList.remove("active");
+        document.getElementById("er").classList.add("active");
     }
     addWall(i,j){
+        if(this.drawOption == undefined) this.drawOption = 1;
         if(this.isMouseDown){
             var squares = [];
             for (var o = 0; o < this.state.squares.length; o++)
                 squares = this.state.squares.slice();
             if(squares[i][j] == 'green' || squares[i][j] == 'start'){
-            } else if (!this.isWalls && this.isWalls!=undefined){
+            } else if (this.drawOption == 2){
                 squares[i][j] = 'weight real_weight';
                 document.getElementById(i+","+j).className = 'weight real_weight square';
-            } else if (squares[i][j] == 'wall'){
-              //  squares[i][j] = null;
-               // document.getElementById(i+","+j).className = 'square';
-            } else {
+            } else if (this.drawOption == 1) {
                 squares[i][j] = 'wall';
                 document.getElementById(i+","+j).className = 'wall square';
+            } else if (this.drawOption == 3) {
+                squares[i][j] = null;
+                document.getElementById(i+","+j).className = 'square';
             }
         }
     }
@@ -631,6 +640,7 @@ class Board extends React.Component {
                 <div className="btn-grouping">
                     <NavButton variant="contained" color="primary" id="w"  className="active" onClick={() => this.toggleWall()}> Add Walls</NavButton>
                     <NavButton variant="contained" color="primary" id="we" onClick={() => this.toggleWeight()}> Add Weights</NavButton>
+                    <NavButton variant="contained" color="primary" id="er" onClick={() => this.toggleErase()}> Eraser</NavButton>
                 </div>
                 <div className="btn-grouping">
                     <NavButton variant="contained" color="primary" onClick={() => this.BFS(this.state.xStart,this.state.yStart)}> Dijsktra's</NavButton>
