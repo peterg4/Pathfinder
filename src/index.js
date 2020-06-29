@@ -675,6 +675,9 @@ const NavButton = withStyles({
 const ClearButton = withStyles({
     root: {
       margin: '5px 8px',
+      maxHeight: '36px',
+      width: 'fit-content',
+      whiteSpace: 'nowrap'
     },
 })(Button);
 
