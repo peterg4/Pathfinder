@@ -13,7 +13,7 @@ const GLOBAL_YGOAL = parseInt(GLOBAL_YMAX*(3/4));
 function randomIntFromInterval(min, max) { // min and max included 
     return Math.floor(Math.random() * (max - min + 1) + min);
 }
-console.log(GLOBAL_XMAX, GLOBAL_YMAX)
+console.log(GLOBAL_XMAX, GLOBAL_YMAX);
 function Square(props) {
     if(props.y==GLOBAL_YGOAL && props.x == GLOBAL_XGOAL) {
         return (
